@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.31d6cfe0.css",
-    "main.js": "/static/js/main.9e887060.js",
-    "static/js/453.8a556913.chunk.js": "/static/js/453.8a556913.chunk.js",
-    "index.html": "/index.html",
-    "main.9e887060.js.map": "/static/js/main.9e887060.js.map",
-    "453.8a556913.chunk.js.map": "/static/js/453.8a556913.chunk.js.map"
+    "main.css": "/arma-reforger-calc-mortar/static/css/main.31d6cfe0.css",
+    "main.js": "/arma-reforger-calc-mortar/static/js/main.ecfcafa3.js",
+    "static/js/453.8a556913.chunk.js": "/arma-reforger-calc-mortar/static/js/453.8a556913.chunk.js",
+    "index.html": "/arma-reforger-calc-mortar/index.html",
+    "main.ecfcafa3.js.map": "/arma-reforger-calc-mortar/static/js/main.ecfcafa3.js.map",
+    "453.8a556913.chunk.js.map": "/arma-reforger-calc-mortar/static/js/453.8a556913.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.9e887060.js"
+    "static/js/main.ecfcafa3.js"
   ]
 }
