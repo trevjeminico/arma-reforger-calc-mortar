@@ -26,6 +26,7 @@ export function getRangeTableByRing(type, index, teamName) {
 
 function getRangeData(type, index, range, teamName) {
   const rangeTableData = getRangeTableByRing(type, index, teamName);
+
   if (rangeTableData.length > 0) {
     const fixMil = rangeTableData[0].fix_mil;
     const rangeFullDetails = rangeTableData[0].range;

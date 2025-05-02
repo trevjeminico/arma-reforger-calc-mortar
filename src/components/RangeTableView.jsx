@@ -1,19 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { getRangeTableByRing } from "../tools/Calculate";
-import { Heading, Table, Box, Flex } from "@chakra-ui/react";
+import { Table, Box, Flex } from "@chakra-ui/react";
 import { MortarIcon } from "./icons/IconsIndex";
 export default function RangeTableView({ shellType, index, teamSelected }) {
   const wrapToArray = getRangeTableByRing(shellType, index, teamSelected);
   const rangeAndMils = wrapToArray[0]?.range;
   return (
     <>
-      <Box py="15px" px="20px" borderWidth="1px">
+      <Box py="15px" px="20px" borderBottomWidth="1px">
         <Flex flexWrap="wrap" direction="row" justify="space-between">
-          <Heading>
-            Ballistic Data for {shellType} round ({index} RINGS)
+          <Box py="5px" pl="15px" textStyle="lg" fontWeight="medium">
+            {shellType} round ({index} RINGS)
             <MortarIcon size="xl" />
-          </Heading>
+          </Box>
           {rangeAndMils && (
             <Box
               textAlign="end"
@@ -29,7 +29,7 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
         </Flex>
       </Box>
 
-      {rangeAndMils && (
+      {rangeAndMils ? (
         <Table.Root size="lg" striped stickyHeader>
           <Table.Header>
             <Table.Row>
@@ -58,6 +58,16 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
             ))}
           </Table.Body>
         </Table.Root>
+      ) : (
+        <Box
+          textAlign="center"
+          p="15px"
+          color="red"
+          fontWeight="medium"
+          textTransform="uppercase"
+        >
+          NO {index} RING FOR {shellType} please select other rings
+        </Box>
       )}
     </>
   );

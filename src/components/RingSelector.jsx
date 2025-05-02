@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { getShellType } from "../tools/Calculate";
 import { Box, Flex, Tabs } from "@chakra-ui/react";
 import PropTypes from "prop-types";
@@ -15,6 +15,7 @@ export default function RingSelector({
       max: data.minMaxRange[1],
     });
   };
+  const [tabValue, setTabValue] = useState(1);
   const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
   const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
 
@@ -26,15 +27,20 @@ export default function RingSelector({
         w="100%"
         fitted
         onValueChange={(e) => {
-          handleRingValue(e.value);
+          const rangeValue = rangeTableList.filter((d) => d.value === e.value);
+          handleRingValue(rangeValue[0]);
+          setTabValue(e.value);
         }}
+        value={tabValue}
       >
         <Tabs.List>
-          {rangeTableList?.map((key, index) => {
+          {rangeTableList?.map((key) => {
             return (
-              <Tabs.Trigger value={key} key={index}>
-                {key.value}
-              </Tabs.Trigger>
+              <>
+                <Tabs.Trigger value={key.value} key={key.value}>
+                  {key.value}
+                </Tabs.Trigger>
+              </>
             );
           })}
         </Tabs.List>
