@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Slider,
   HStack,
@@ -6,17 +6,19 @@ import {
   Input,
   Flex,
   Button,
-  Table,
   ButtonGroup,
+  Stat,
   Field,
+  Spinner,
 } from "@chakra-ui/react";
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
-
-import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
+import TeamSaveTargetTable from "./TeamSaveTargetTable";
+import { MortarIcon } from "./icons/IconsIndex";
 
 export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
   const [targetRange, setTargetRange] = useState(0);
+  const [showSpinner, setShowSpinner] = useState(false);
   const [targetAltDiff, setTargetAltDiff] = useState(0);
   const [saveElevationTarget, setSaveElevationTarget] = useState(0);
   const [targetName, setTargetName] = useState(0);
@@ -24,8 +26,24 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
   const [savePreviousTargetNato, setSavePreviousTargetNato] = useState([]);
   const [savePreviousTargetRU, setSavePreviousTargetRU] = useState([]);
   const handleTargetRange = (e) => {
-    console.log(e.target);
     setTargetRange(e.target.value);
+    setShowSpinner(true);
+    if (e.target.value > 0) {
+      const getElevation = calculateElevation(
+        e.target.value,
+        rangeValues.ring,
+        targetAltDiff,
+        shellType,
+        teamSelected
+      );
+
+      setTimeout(() => {
+        setShowSpinner(false);
+      }, 2000);
+      setTimeout(() => {
+        setSaveElevationTarget(getElevation?.elevationTotal);
+      }, 1000);
+    }
   };
 
   const handleTargetAltDiff = (e) => {
@@ -75,23 +93,10 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
     }
   };
 
-  useEffect(() => {
-    if (targetRange > 0) {
-      const getElevation = calculateElevation(
-        targetRange,
-        rangeValues.ring,
-        targetAltDiff,
-        shellType,
-        teamSelected
-      );
-      setSaveElevationTarget(getElevation?.elevationTotal);
-    }
-  }, [targetAltDiff, targetRange, rangeValues, shellType, teamSelected]);
-
   return (
     <>
       <Box mt="5px">
-        <Flex gap="2" direction="column">
+        <Flex gap="2" direction="column" flexBasis="100%">
           <Slider.Root
             defaultValue={[rangeValues?.min]}
             size="lg"
@@ -101,18 +106,30 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
             value={[targetRange]}
           >
             <HStack justify="space-between">
-              <Field.Root>
-                <Flex justify="space-between">
-                  <Field.Label>Alt Difference:</Field.Label>
-                  <Input
-                    name="altDiff"
-                    onChange={handleTargetAltDiff}
-                    w="60%"
-                  />
-                </Flex>
-              </Field.Root>
-              <Slider.Label>Range(M):</Slider.Label>
-              <Input onChange={handleTargetRange} />
+              <Flex direction={{ base: "column", lg: "row" }} flexBasis="100%">
+                <Field.Root>
+                  <Flex
+                    justify="space-between"
+                    flexBasis="100%"
+                    direction={{ base: "column", lg: "row" }}
+                    w="100%"
+                  >
+                    <Field.Label>Alt Difference:</Field.Label>
+                    <Input
+                      name="altDiff"
+                      onChange={handleTargetAltDiff}
+                      w={{ base: "100%", lg: "60%" }}
+                    />
+                  </Flex>
+                </Field.Root>
+                <Slider.Label
+                  my={{ lg: "10px", base: "0px" }}
+                  mx={{ lg: "5px", base: "0px" }}
+                >
+                  Range(M):
+                </Slider.Label>
+                <Input onChange={handleTargetRange} />
+              </Flex>
             </HStack>
             <Slider.Control>
               <Slider.Track>
@@ -124,189 +141,75 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
         </Flex>
 
         <Box mt="5px">
-          <form>
-            <Flex gap="2" direction="row">
-              <Input
-                placeholder="target degree"
-                name="targetDegree"
-                onChange={(e) => {
-                  setTargetDegree(e.target.value);
-                }}
-                width="35%"
-              />
-              <Box p="10px">{saveElevationTarget} mil</Box>
-              <ButtonGroup variant="outline">
-                <Button onClick={handleSaveTarget} colorPalette="blue">
-                  Save
-                </Button>
-                <Button onClick={handleClearBtn} colorPalette="red">
-                  Clear
-                </Button>
-              </ButtonGroup>
-            </Flex>
-          </form>
+          <Flex
+            gap="2"
+            flexWrap="wrap"
+            direction={{ base: "column", lg: "row" }}
+            w={{ base: "100%" }}
+            flexBasis="100%"
+          >
+            <Box>
+              <Field.Root my="5px">
+                <Field.Label my={{ base: "5px", lg: "0px" }}>
+                  Target Degree:
+                </Field.Label>
+                <Input
+                  placeholder="target degree"
+                  name="targetDegree"
+                  onChange={(e) => {
+                    setTargetDegree(e.target.value);
+                  }}
+                  w="100%"
+                />
+              </Field.Root>
+            </Box>
+            <Stat.Root
+              maxW="200px"
+              borderWidth="1px"
+              p="4"
+              rounded="md"
+              visual
+              mt="5px"
+              mb="15px"
+            >
+              <HStack justify="space-between">
+                <Stat.Label> Elevation:</Stat.Label>
+              </HStack>
+              <Stat.ValueText>
+                <MortarIcon size={{ base: "lg", lg: "md" }} mt="5px" />
+                {showSpinner ? (
+                  <Spinner size="md" mt="5%" />
+                ) : (
+                  <> {saveElevationTarget} </>
+                )}
+                MIL
+              </Stat.ValueText>
+            </Stat.Root>
+          </Flex>
+          <ButtonGroup variant="outline">
+            <Button onClick={handleSaveTarget} colorPalette="blue">
+              Save
+            </Button>
+            <Button onClick={handleClearBtn} colorPalette="red">
+              Clear
+            </Button>
+          </ButtonGroup>
         </Box>
       </Box>
       <Box mt="15px" borderWidth="1px">
         {teamSelected === "nato" && (
-          <>
-            {savePreviousTargetNato.length === 0 ? (
-              <Box
-                textAlign="center"
-                p="15px"
-                color="blue.500"
-                textTransform="uppercase"
-              >
-                no target saved NATO
-              </Box>
-            ) : (
-              <Table.ScrollArea borderWidth="1px" rounded="md" maxH="250px">
-                <Table.Root size="lg" stickyHeader>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeader textAlign="center">
-                        Target #
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Degree
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Elevation
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Ring
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Round Type
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Remove
-                      </Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {savePreviousTargetNato.map((key, i) => {
-                      return (
-                        <Table.Row
-                          key={i}
-                          bg={{
-                            base: "blue.100",
-                          }}
-                        >
-                          <Table.Cell textAlign="center">{key.name}</Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.deg}
-                            <span>&#176;</span>
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.elev} mil
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">{key.ring}</Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.type === "HE" && <ExplosiveIcon size="md" />}
-                            {key.type === "SMOKE" && <SmokeIcon size="lg" />}
-                            {key.type === "ILLUMINATION" && (
-                              <FlareIcon size="lg" />
-                            )}
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            <Button
-                              onClick={handleRemove}
-                              colorPalette="red"
-                              value={key.name}
-                              size="sm"
-                            >
-                              x
-                            </Button>
-                          </Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                  </Table.Body>
-                </Table.Root>
-              </Table.ScrollArea>
-            )}
-          </>
+          <TeamSaveTargetTable
+            teamSaveData={savePreviousTargetNato}
+            handleRemove={handleRemove}
+            teamSelected={teamSelected}
+          />
         )}
         {teamSelected === "russian" && (
-          <>
-            {savePreviousTargetRU.length === 0 ? (
-              <Box
-                textAlign="center"
-                p="15px"
-                color="red.500"
-                textTransform="uppercase"
-              >
-                no target saved
-              </Box>
-            ) : (
-              <Table.ScrollArea borderWidth="1px" rounded="md" maxH="250px">
-                <Table.Root size="lg" stickyHeader>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeader textAlign="center">
-                        Target #
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Degree
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Elevation
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Ring
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Round Type
-                      </Table.ColumnHeader>
-                      <Table.ColumnHeader textAlign="center">
-                        Remove
-                      </Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {savePreviousTargetRU.map((key, i) => {
-                      return (
-                        <Table.Row
-                          key={i}
-                          bg={{
-                            base: "red.100",
-                          }}
-                        >
-                          <Table.Cell textAlign="center">{key.name}</Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.deg}
-                            <span>&#176;</span>
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.elev} mil
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">{key.ring}</Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {key.type === "HE" && <ExplosiveIcon size="md" />}
-                            {key.type === "SMOKE" && <SmokeIcon size="lg" />}
-                            {key.type === "ILLUMINATION" && (
-                              <FlareIcon size="lg" />
-                            )}
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            <Button
-                              onClick={handleRemove}
-                              colorPalette="red"
-                              value={key.name}
-                              size="sm"
-                            >
-                              x
-                            </Button>
-                          </Table.Cell>
-                        </Table.Row>
-                      );
-                    })}
-                  </Table.Body>
-                </Table.Root>
-              </Table.ScrollArea>
-            )}
-          </>
+          <TeamSaveTargetTable
+            teamSaveData={savePreviousTargetRU}
+            handleRemove={handleRemove}
+            teamSelected={teamSelected}
+          />
         )}
       </Box>
     </>

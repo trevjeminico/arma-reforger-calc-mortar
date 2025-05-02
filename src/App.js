@@ -17,8 +17,18 @@ function App() {
     <Flex background="gray.contrast" minH="100vh" direction="column">
       {SHOW_HEADER.enable && <HeaderNav flex="none" selectedTeam={setTeam} />}
       <Container flex={1}>
-        <Flex gap="3" direction="row" align="flex-start">
-          <Flex direction="column" gap="4" justify="center" width="50%">
+        <Flex
+          gap="3"
+          direction={{ base: "column", lg: "row" }}
+          align="flex-start"
+          flexBasis="100%"
+        >
+          <Flex
+            direction="column"
+            gap="4"
+            justify="center"
+            width={{ base: "100%", lg: "50%" }}
+          >
             <Box width="100%" borderWidth="1px" padding="25px">
               <ShellTypeSelector
                 typeSelected={setShellType}
@@ -39,7 +49,7 @@ function App() {
               )}
             </Box>
           </Flex>
-          <Box width="50%" borderWidth="1px">
+          <Box width={{ base: "100%", lg: "50%" }} borderWidth="1px">
             {hasRingValues?.ring >= 0 ? (
               <RangeTableView
                 index={hasRingValues.ring}

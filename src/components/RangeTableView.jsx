@@ -2,7 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { getRangeTableByRing } from "../tools/Calculate";
 import { Table, Box, Flex } from "@chakra-ui/react";
-import { MortarIcon } from "./icons/IconsIndex";
+import {
+  ExplosiveIcon,
+  FlareIcon,
+  SmokeIcon,
+  MortarIcon,
+} from "./icons/IconsIndex";
 export default function RangeTableView({ shellType, index, teamSelected }) {
   const wrapToArray = getRangeTableByRing(shellType, index, teamSelected);
   const rangeAndMils = wrapToArray[0]?.range;
@@ -10,20 +15,28 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
     <>
       <Box py="15px" px="20px" borderBottomWidth="1px">
         <Flex flexWrap="wrap" direction="row" justify="space-between">
-          <Box py="5px" pl="15px" textStyle="lg" fontWeight="medium">
-            {shellType} round ({index} RINGS)
-            <MortarIcon size="xl" />
+          <Box
+            py="5px"
+            pl="15px"
+            textStyle={{ base: "md", lg: "lg" }}
+            fontWeight="medium"
+          >
+            {shellType === "HE" && <ExplosiveIcon size="md" />}
+            {shellType === "SMOKE" && <SmokeIcon size="lg" />}
+            {shellType === "ILLUMINATION" && <FlareIcon size="lg" />} round (
+            {index} RINGS)
+            <MortarIcon size={{ base: "md", lg: "xl" }} />
           </Box>
           {rangeAndMils && (
             <Box
               textAlign="end"
               py="5px"
               pl="15px"
-              textStyle="lg"
+              textStyle={{ base: "md", lg: "lg" }}
               fontWeight="medium"
               borderLeftWidth="1px"
             >
-              Average Dispersion {wrapToArray[0].fix_mil} M
+              Avg. D {wrapToArray[0].fix_mil} M
             </Box>
           )}
         </Flex>
@@ -33,16 +46,28 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
         <Table.Root size="lg" striped stickyHeader>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader textAlign="center">
+              <Table.ColumnHeader
+                textAlign="center"
+                textStyle={{ base: "sm", lg: "md" }}
+              >
                 Range (M)
               </Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="center">
+              <Table.ColumnHeader
+                textAlign="center"
+                textStyle={{ base: "sm", lg: "md" }}
+              >
                 Elevation (MIL)
               </Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="center">
+              <Table.ColumnHeader
+                textAlign="center"
+                textStyle={{ base: "sm", lg: "md" }}
+              >
                 Time of Flight (SEC)
               </Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="center">
+              <Table.ColumnHeader
+                textAlign="center"
+                textStyle={{ base: "sm", lg: "md" }}
+              >
                 Time of Flight per 100 M DR (SEC)
               </Table.ColumnHeader>
             </Table.Row>
