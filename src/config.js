@@ -1,5 +1,5 @@
 export const FEATURE = {
   SHOW_HEADER: {
-    enable: false,
+    enable: true,
   },
 };

@@ -1,21 +1,31 @@
-import { RangeTable } from "./RangeTable";
-
+import { RussianRangeTable } from "./RussianRangeTable";
+import { NatoRangeTable } from "./NatoRangeTable";
 function inbetween(x, min, max) {
   return x >= min && x <= max;
 }
 
-export function getRangeTableByRing(type, index) {
-  const rangeList = RangeTable.filter((shell) => shell.Shell_type === type);
-  const rangeValues = rangeList[0].rangeTableList;
-  const returnRange = rangeValues.filter(
+function getTeamRangeTable(teamName) {
+  return teamName === "nato" ? NatoRangeTable : RussianRangeTable;
+}
+
+export function getShellType(type, teamName) {
+  const RangeTable = getTeamRangeTable(teamName);
+
+  return RangeTable.filter((shell) => shell.Shell_type === type);
+}
+
+export function getRangeTableByRing(type, index, teamName) {
+  const rangeShells = getShellType(type, teamName);
+  const rangeList = rangeShells[0].rangeTableList;
+  const returnRange = rangeList.filter(
     (rangeTable) => rangeTable.value === index
   );
 
   return returnRange;
 }
 
-function getRangeData(type, index, range) {
-  const rangeTableData = getRangeTableByRing(type, index);
+function getRangeData(type, index, range, teamName) {
+  const rangeTableData = getRangeTableByRing(type, index, teamName);
   if (rangeTableData.length > 0) {
     const fixMil = rangeTableData[0].fix_mil;
     const rangeFullDetails = rangeTableData[0].range;
@@ -38,8 +48,14 @@ function getRangeData(type, index, range) {
   }
 }
 
-export function calculateElevation(currentRange, index, altitudeDiff, type) {
-  const fetchRangeValues = getRangeData(type, index, currentRange);
+export function calculateElevation(
+  currentRange,
+  index,
+  altitudeDiff,
+  type,
+  teamName
+) {
+  const fetchRangeValues = getRangeData(type, index, currentRange, teamName);
   if (!fetchRangeValues) {
     return 0;
   }
@@ -53,7 +69,6 @@ export function calculateElevation(currentRange, index, altitudeDiff, type) {
     parseFloat(fetchRangeValues?.e1) +
     parseFloat(rangeDiff1) +
     parseFloat(aslValue);
-  console.log(aslValue);
   return {
     elevationTotal: parseFloat(total).toFixed(2),
     rangeValues: fetchRangeValues,

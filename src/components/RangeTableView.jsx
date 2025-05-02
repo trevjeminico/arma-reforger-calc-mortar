@@ -1,33 +1,49 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { getRangeTableByRing } from "../tools/Calculate";
-import { Table } from "@chakra-ui/react";
-export default function RangeTableView({ shellType, index }) {
-  const wrapToArray = getRangeTableByRing(shellType, index);
+import { Heading, Table, Box, Flex } from "@chakra-ui/react";
+import { MortarIcon } from "./icons/IconsIndex";
+export default function RangeTableView({ shellType, index, teamSelected }) {
+  const wrapToArray = getRangeTableByRing(shellType, index, teamSelected);
   const rangeAndMils = wrapToArray[0]?.range;
   return (
     <>
+      <Box py="15px" px="20px" borderWidth="1px">
+        <Flex flexWrap="wrap" direction="row" justify="space-between">
+          <Heading>
+            Ballistic Data for {shellType} round ({index} RINGS)
+            <MortarIcon size="xl" />
+          </Heading>
+          {rangeAndMils && (
+            <Box
+              textAlign="end"
+              py="5px"
+              pl="15px"
+              textStyle="lg"
+              fontWeight="medium"
+              borderLeftWidth="1px"
+            >
+              Average Dispersion {wrapToArray[0].fix_mil} M
+            </Box>
+          )}
+        </Flex>
+      </Box>
+
       {rangeAndMils && (
         <Table.Root size="lg" striped stickyHeader>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Range Data</Table.ColumnHeader>
-              <Table.ColumnHeader>{index} Ring</Table.ColumnHeader>
-              <Table.ColumnHeader></Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="end">
-                {wrapToArray[0].fix_mil} M
-              </Table.ColumnHeader>
-            </Table.Row>
-            <Table.Row>
               <Table.ColumnHeader textAlign="center">
-                Distance (M)
+                Range (M)
               </Table.ColumnHeader>
               <Table.ColumnHeader textAlign="center">
-                Elevation (Mils)
+                Elevation (MIL)
               </Table.ColumnHeader>
-              <Table.ColumnHeader textAlign="center">Time</Table.ColumnHeader>
               <Table.ColumnHeader textAlign="center">
-                Time Diff. 100 M
+                Time of Flight (SEC)
+              </Table.ColumnHeader>
+              <Table.ColumnHeader textAlign="center">
+                Time of Flight per 100 M DR (SEC)
               </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
@@ -50,4 +66,5 @@ export default function RangeTableView({ shellType, index }) {
 RangeTableView.prototype = {
   index: PropTypes.number,
   shellType: PropTypes.string,
+  teamSelected: PropTypes.string,
 };

@@ -16,12 +16,14 @@ function App() {
   return (
     <Flex background="gray.contrast" minH="100vh" direction="column">
       {SHOW_HEADER.enable && <HeaderNav flex="none" selectedTeam={setTeam} />}
-
       <Container flex={1}>
         <Flex gap="3" direction="row" align="flex-start">
           <Flex direction="column" gap="4" justify="center" width="50%">
             <Box width="100%" borderWidth="1px" padding="25px">
-              <ShellTypeSelector typeSelected={setShellType} />
+              <ShellTypeSelector
+                typeSelected={setShellType}
+                teamSelected={team}
+              />
               <RangeSelector
                 ringSelected={setHasRingValues}
                 shellTypeIs={shellType}
@@ -31,6 +33,7 @@ function App() {
                 <RangeSlider
                   rangeValues={hasRingValues}
                   shellType={shellType}
+                  teamSelected={team}
                 />
               )}
             </Box>
@@ -40,6 +43,7 @@ function App() {
               <RangeTableView
                 index={hasRingValues.ring}
                 shellType={shellType}
+                teamSelected={team}
               />
             ) : (
               <Box p="15px" textAlign="center">

@@ -1,9 +1,13 @@
 import React from "react";
-import { RangeTable } from "../tools/RangeTable";
+import { getShellType } from "../tools/Calculate";
 import { Box, Flex, Tabs } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
-export default function RingSelector({ ringSelected, shellTypeIs }) {
+export default function RingSelector({
+  ringSelected,
+  shellTypeIs,
+  teamSelected,
+}) {
   const handleRingValue = (data) => {
     ringSelected({
       ring: data.value,
@@ -11,9 +15,7 @@ export default function RingSelector({ ringSelected, shellTypeIs }) {
       max: data.minMaxRange[1],
     });
   };
-  const getShellTypeRangeTable = RangeTable.filter(
-    (shell) => shell?.Shell_type === shellTypeIs
-  );
+  const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
   const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
 
   return (
@@ -44,4 +46,5 @@ export default function RingSelector({ ringSelected, shellTypeIs }) {
 RingSelector.prototype = {
   ringSelected: PropTypes.func,
   shellTypeIs: PropTypes.string,
+  teamSelected: PropTypes.string,
 };

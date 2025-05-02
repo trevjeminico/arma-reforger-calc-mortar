@@ -13,7 +13,9 @@ import {
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
 
-export default function RangeSlider({ rangeValues, shellType }) {
+import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
+
+export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
   const [targetRange, setTargetRange] = useState(0);
   const [targetAltDiff, setTargetAltDiff] = useState(0);
   const [saveElevationTarget, setSaveElevationTarget] = useState(0);
@@ -58,11 +60,12 @@ export default function RangeSlider({ rangeValues, shellType }) {
         targetRange,
         rangeValues.ring,
         targetAltDiff,
-        shellType
+        shellType,
+        teamSelected
       );
       setSaveElevationTarget(getElevation?.elevationTotal);
     }
-  }, [targetAltDiff, targetRange, rangeValues, shellType]);
+  }, [targetAltDiff, targetRange, rangeValues, shellType, teamSelected]);
 
   return (
     <>
@@ -128,33 +131,49 @@ export default function RangeSlider({ rangeValues, shellType }) {
             no target saved
           </Box>
         ) : (
-          <Table.Root size="lg" striped>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader>Target #</Table.ColumnHeader>
-                <Table.ColumnHeader>Degree</Table.ColumnHeader>
-                <Table.ColumnHeader>Elevation</Table.ColumnHeader>
-                <Table.ColumnHeader>Ring</Table.ColumnHeader>
-                <Table.ColumnHeader>Shell Type</Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {savePreviousTarget.map((key, i) => {
-                return (
-                  <Table.Row key={i}>
-                    <Table.Cell>{key.name}</Table.Cell>
-                    <Table.Cell>
-                      {key.deg}
-                      <span>&#176;</span>
-                    </Table.Cell>
-                    <Table.Cell>{key.elev} mil</Table.Cell>
-                    <Table.Cell>{key.ring}</Table.Cell>
-                    <Table.Cell>{key.type}</Table.Cell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table.Root>
+          <Table.ScrollArea borderWidth="1px" rounded="md" maxH="250px">
+            <Table.Root size="lg" striped stickyHeader>
+              <Table.Header>
+                <Table.Row>
+                  <Table.ColumnHeader textAlign="center">
+                    Target #
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="center">
+                    Degree
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="center">
+                    Elevation
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="center">
+                    Ring
+                  </Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="center">
+                    Round Type
+                  </Table.ColumnHeader>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                {savePreviousTarget.map((key, i) => {
+                  return (
+                    <Table.Row key={i}>
+                      <Table.Cell textAlign="center">{key.name}</Table.Cell>
+                      <Table.Cell textAlign="center">
+                        {key.deg}
+                        <span>&#176;</span>
+                      </Table.Cell>
+                      <Table.Cell textAlign="center">{key.elev} mil</Table.Cell>
+                      <Table.Cell textAlign="center">{key.ring}</Table.Cell>
+                      <Table.Cell textAlign="center">
+                        {key.type === "HE" && <ExplosiveIcon size="md" />}
+                        {key.type === "SMOKE" && <SmokeIcon size="lg" />}
+                        {key.type === "ILLUMINATION" && <FlareIcon size="lg" />}
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+              </Table.Body>
+            </Table.Root>
+          </Table.ScrollArea>
         )}
       </Box>
     </>
@@ -164,4 +183,5 @@ export default function RangeSlider({ rangeValues, shellType }) {
 RangeSlider.prototype = {
   rangeValues: PropTypes.any,
   shellType: PropTypes.string,
+  teamSelected: PropTypes.string,
 };

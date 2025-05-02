@@ -6,6 +6,6 @@ export const MortarShellType = [
     name: "SMOKE",
   },
   {
-    name: "FLARE",
+    name: "ILLUMINATION",
   },
 ];
