@@ -27,6 +27,7 @@ function App() {
               <RangeSelector
                 ringSelected={setHasRingValues}
                 shellTypeIs={shellType}
+                teamSelected={team}
               />
 
               {hasRingValues?.min && (

@@ -18,7 +18,6 @@ export default function RingSelector({
   const [tabValue, setTabValue] = useState(1);
   const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
   const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
-
   return (
     <Flex gap="4" justify="center" align="center">
       <Box>RING:</Box>
