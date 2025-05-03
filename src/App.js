@@ -6,8 +6,10 @@ import RangeTableView from "./components/RangeTableView";
 import HeaderNav from "./components/HeaderNav";
 import ShellTypeSelector from "./components/ShellTypeSelector";
 import { FEATURE } from "./config";
+import RangeCalculator from "./components/RangeCalculator";
 
 function App() {
+  const [hasRangeValues, setHasRangeValues] = useState(0);
   const [hasRingValues, setHasRingValues] = useState({});
   const [team, setTeam] = useState("russian");
   const [shellType, setShellType] = useState("HE");
@@ -34,6 +36,7 @@ function App() {
                 typeSelected={setShellType}
                 teamSelected={team}
               />
+
               <RangeSelector
                 ringSelected={setHasRingValues}
                 shellTypeIs={shellType}
@@ -41,11 +44,18 @@ function App() {
               />
 
               {hasRingValues?.min && (
-                <RangeSlider
-                  rangeValues={hasRingValues}
-                  shellType={shellType}
-                  teamSelected={team}
-                />
+                <>
+                  <RangeCalculator
+                    setTotalRange={setHasRangeValues}
+                    teamSelected={team}
+                  />
+                  <RangeSlider
+                    rangeTotal={hasRangeValues}
+                    ringValues={hasRingValues}
+                    shellType={shellType}
+                    teamSelected={team}
+                  />
+                </>
               )}
             </Box>
           </Flex>

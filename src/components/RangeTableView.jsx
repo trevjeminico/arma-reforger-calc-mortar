@@ -2,12 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { getRangeTableByRing } from "../tools/Calculate";
 import { Table, Box, Flex } from "@chakra-ui/react";
-import {
-  ExplosiveIcon,
-  FlareIcon,
-  SmokeIcon,
-  MortarIcon,
-} from "./icons/IconsIndex";
+import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
 export default function RangeTableView({ shellType, index, teamSelected }) {
   const wrapToArray = getRangeTableByRing(shellType, index, teamSelected);
   const rangeAndMils = wrapToArray[0]?.range;
@@ -25,7 +20,6 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
             {shellType === "SMOKE" && <SmokeIcon size="lg" />}
             {shellType === "ILLUMINATION" && <FlareIcon size="lg" />} round (
             {index} RINGS)
-            <MortarIcon size={{ base: "md", lg: "xl" }} />
           </Box>
           {rangeAndMils && (
             <Box
@@ -64,12 +58,6 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
               >
                 Time of Flight (SEC)
               </Table.ColumnHeader>
-              <Table.ColumnHeader
-                textAlign="center"
-                textStyle={{ base: "sm", lg: "md" }}
-              >
-                Time of Flight per 100 M DR (SEC)
-              </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -78,7 +66,6 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
                 <Table.Cell textAlign="center">{item.r}</Table.Cell>
                 <Table.Cell textAlign="center">{item.mils}</Table.Cell>
                 <Table.Cell textAlign="center">{item.time}</Table.Cell>
-                <Table.Cell textAlign="center">{item.timeDiff}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

@@ -10,13 +10,19 @@ import {
   Stat,
   Field,
   Spinner,
+  InputGroup,
 } from "@chakra-ui/react";
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
 import TeamSaveTargetTable from "./TeamSaveTargetTable";
-import { MortarIcon } from "./icons/IconsIndex";
+import { MortarIcon, MaxIcon, MinIcon } from "./icons/IconsIndex";
 
-export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
+export default function RangeSlider({
+  rangeTotal,
+  ringValues,
+  shellType,
+  teamSelected,
+}) {
   const [targetRange, setTargetRange] = useState(0);
   const [showSpinner, setShowSpinner] = useState(false);
   const [targetAltDiff, setTargetAltDiff] = useState(0);
@@ -25,6 +31,7 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
   const [targetDegree, setTargetDegree] = useState("0");
   const [savePreviousTargetNato, setSavePreviousTargetNato] = useState([]);
   const [savePreviousTargetRU, setSavePreviousTargetRU] = useState([]);
+
   const handleTargetRange = (e) => {
     setTargetRange(e.target.value);
     setShowSpinner(true);
@@ -44,7 +51,7 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
         name: targetName,
         deg: targetDegree,
         elev: saveElevationTarget,
-        ring: rangeValues.ring,
+        ring: ringValues.ring,
         type: shellType,
         team: teamSelected,
       };
@@ -68,7 +75,6 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
       const newNatoList = savePreviousTargetNato.filter((nato) => {
         return nato.name !== parseInt(e.target.value);
       });
-      console.log(newNatoList);
       setSavePreviousTargetNato(newNatoList);
     } else {
       const newRUList = savePreviousTargetRU.filter(
@@ -82,7 +88,7 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
     if (targetRange > 0) {
       const getElevation = calculateElevation(
         targetRange,
-        rangeValues.ring,
+        ringValues.ring,
         targetAltDiff,
         shellType,
         teamSelected
@@ -92,20 +98,29 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
         setShowSpinner(false);
       }, 2000);
       setTimeout(() => {
-        setSaveElevationTarget(getElevation?.elevationTotal);
+        const total = getElevation?.elevationTotal || "Nan";
+        setSaveElevationTarget(total);
       }, 1000);
     }
-  }, [targetRange, rangeValues, targetAltDiff, shellType, teamSelected]);
+
+    setTargetRange(rangeTotal > 0 ? rangeTotal : ringValues.min);
+  }, [
+    targetRange,
+    ringValues,
+    targetAltDiff,
+    shellType,
+    teamSelected,
+    rangeTotal,
+  ]);
 
   return (
     <>
       <Box mt="5px">
         <Flex gap="2" direction="column" flexBasis="100%">
           <Slider.Root
-            defaultValue={[rangeValues?.min]}
             size="lg"
-            max={rangeValues?.max}
-            min={rangeValues?.min}
+            max={ringValues?.max}
+            min={ringValues?.min}
             readOnly
             value={[targetRange]}
           >
@@ -117,6 +132,7 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
                     flexBasis="100%"
                     direction={{ base: "column", lg: "row" }}
                     w="100%"
+                    mb={{ base: "15px", lg: "0px" }}
                   >
                     <Field.Label>Alt Difference:</Field.Label>
                     <Input
@@ -132,7 +148,22 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
                 >
                   Range(M):
                 </Slider.Label>
-                <Input onChange={handleTargetRange} />
+                <InputGroup startElement={<MinIcon size="md" />}>
+                  <Input
+                    onChange={handleTargetRange}
+                    value={ringValues?.min}
+                    readOnly
+                    disabled
+                  />
+                </InputGroup>
+                <InputGroup startElement={<MaxIcon size="md" />}>
+                  <Input
+                    onChange={handleTargetRange}
+                    value={targetRange}
+                    readOnly
+                    disabled
+                  />
+                </InputGroup>
               </Flex>
             </HStack>
             <Slider.Control>
@@ -180,7 +211,7 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
                 <Stat.Label> Elevation:</Stat.Label>
               </HStack>
               <Stat.ValueText>
-                <MortarIcon size={{ base: "lg", lg: "md" }} mt="5px" />
+                <MortarIcon size={{ base: "lg", lg: "md" }} mt="4.5%" />
                 {showSpinner ? (
                   <Spinner size="md" mt="5%" />
                 ) : (
@@ -221,7 +252,8 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
 }
 
 RangeSlider.prototype = {
-  rangeValues: PropTypes.any,
+  rangeTotal: PropTypes.any,
+  ringValues: PropTypes.any,
   shellType: PropTypes.string,
   teamSelected: PropTypes.string,
 };
