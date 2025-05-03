@@ -7,7 +7,6 @@ export default function TeamSaveTargetTable({
   handleRemove,
   teamSelected,
 }) {
-  console.log(teamSelected);
   return (
     <>
       {teamSaveData.length === 0 ? (
