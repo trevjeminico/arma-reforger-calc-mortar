@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Slider,
   HStack,
@@ -28,25 +28,10 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
   const handleTargetRange = (e) => {
     setTargetRange(e.target.value);
     setShowSpinner(true);
-    if (e.target.value > 0) {
-      const getElevation = calculateElevation(
-        e.target.value,
-        rangeValues.ring,
-        targetAltDiff,
-        shellType,
-        teamSelected
-      );
-
-      setTimeout(() => {
-        setShowSpinner(false);
-      }, 2000);
-      setTimeout(() => {
-        setSaveElevationTarget(getElevation?.elevationTotal);
-      }, 1000);
-    }
   };
 
   const handleTargetAltDiff = (e) => {
+    setShowSpinner(true);
     setTimeout(() => {
       setTargetAltDiff(e.target.value);
     }, 500);
@@ -92,6 +77,25 @@ export default function RangeSlider({ rangeValues, shellType, teamSelected }) {
       setSavePreviousTargetRU(newRUList);
     }
   };
+
+  useEffect(() => {
+    if (targetRange > 0) {
+      const getElevation = calculateElevation(
+        targetRange,
+        rangeValues.ring,
+        targetAltDiff,
+        shellType,
+        teamSelected
+      );
+
+      setTimeout(() => {
+        setShowSpinner(false);
+      }, 2000);
+      setTimeout(() => {
+        setSaveElevationTarget(getElevation?.elevationTotal);
+      }, 1000);
+    }
+  }, [targetRange, rangeValues, targetAltDiff, shellType, teamSelected]);
 
   return (
     <>
