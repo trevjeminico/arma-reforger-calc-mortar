@@ -1,7 +1,56 @@
 import React from "react";
-import { Table, Button, Box } from "@chakra-ui/react";
+import {
+  Accordion,
+  Span,
+  Button,
+  Box,
+  AbsoluteCenter,
+  Stat,
+  HStack,
+} from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
+
+function TeamDataListWrapper({ data, teamSelected }) {
+  return (
+    <Stat.Root>
+      {data?.map((key, i) => {
+        return (
+          <div key={i}>
+            <HStack justify="space-between">
+              <Stat.Label fontSize="lg">
+                Ring {key.ring}
+                <span>&#176;</span>
+              </Stat.Label>
+              {key.type === "HE" && (
+                <ExplosiveIcon
+                  size="lg"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
+              )}
+              {key.type === "SMOKE" && (
+                <SmokeIcon
+                  size="lg"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
+              )}
+              {key.type === "ILLUMINATION" && (
+                <FlareIcon
+                  size="lg"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
+              )}
+            </HStack>
+            <HStack>
+              <Stat.ValueText>Elevation: {key.elev} Mils</Stat.ValueText>
+            </HStack>
+          </div>
+        );
+      })}
+    </Stat.Root>
+  );
+}
+
 export default function TeamSaveTargetTable({
   teamSaveData,
   handleRemove,
@@ -19,65 +68,41 @@ export default function TeamSaveTargetTable({
           no target saved {teamSelected}
         </Box>
       ) : (
-        <Table.ScrollArea borderWidth="1px" maxH="250px">
-          <Table.Root size="lg" stickyHeader>
-            <Table.Header>
-              <Table.Row>
-                <Table.ColumnHeader textAlign="center">
-                  Target #
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  Degree
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  Elevation
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">Ring</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  Round Type
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  Remove
-                </Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {teamSaveData.map((key, i) => {
-                return (
-                  <Table.Row
-                    key={i}
-                    bg={{
-                      base: teamSelected === "nato" ? "blue.200" : "red.200",
-                    }}
-                  >
-                    <Table.Cell textAlign="center">{key.name}</Table.Cell>
-                    <Table.Cell textAlign="center">
-                      {key.deg}
+        <Accordion.Root collapsible variant="enclosed">
+          {teamSaveData.map((key, i) => {
+            return (
+              <Accordion.Item key={i} value={key.name} p="15px">
+                <Box position="relative">
+                  <Accordion.ItemTrigger>
+                    <Span flex="1">
+                      Target: {key.name} - Deg: {key.deg}
                       <span>&#176;</span>
-                    </Table.Cell>
-                    <Table.Cell textAlign="center">{key.elev} mil</Table.Cell>
-                    <Table.Cell textAlign="center">{key.ring}</Table.Cell>
-                    <Table.Cell textAlign="center">
-                      {key.type === "HE" && <ExplosiveIcon size="md" />}
-                      {key.type === "SMOKE" && <SmokeIcon size="lg" />}
-                      {key.type === "ILLUMINATION" && <FlareIcon size="lg" />}
-                    </Table.Cell>
-                    <Table.Cell textAlign="center">
-                      <Button
-                        onClick={handleRemove}
-                        colorPalette="red"
-                        value={key.name}
-                        size="sm"
-                      >
-                        x
-                      </Button>
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table.Root>
-        </Table.ScrollArea>
+                    </Span>
+                    <Accordion.ItemIndicator />
+                  </Accordion.ItemTrigger>
+                  <AbsoluteCenter axis="vertical" insetEnd="0">
+                    <Button
+                      onClick={handleRemove}
+                      colorPalette="red"
+                      value={key.name}
+                      size="sm"
+                    >
+                      x
+                    </Button>
+                  </AbsoluteCenter>
+                </Box>
+                <Accordion.ItemContent>
+                  <Accordion.ItemBody>
+                    <TeamDataListWrapper
+                      data={[key]}
+                      teamSelected={teamSelected}
+                    />
+                  </Accordion.ItemBody>
+                </Accordion.ItemContent>
+              </Accordion.Item>
+            );
+          })}
+        </Accordion.Root>
       )}
     </>
   );

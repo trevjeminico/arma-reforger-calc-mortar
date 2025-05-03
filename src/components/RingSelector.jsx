@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getShellType } from "../tools/Calculate";
 import { Box, Flex, Tabs } from "@chakra-ui/react";
 import PropTypes from "prop-types";
@@ -8,6 +8,7 @@ export default function RingSelector({
   shellTypeIs,
   teamSelected,
 }) {
+  const [tabValue, setTabValue] = useState(1);
   const handleRingValue = (data) => {
     ringSelected({
       ring: data.value,
@@ -18,6 +19,18 @@ export default function RingSelector({
 
   const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
   const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
+
+  useEffect(() => {
+    const teamhasChange = teamSelected === "nato" || "russian";
+    if (teamhasChange) {
+      const newRange = rangeTableList.filter((d) => d.value === tabValue);
+      ringSelected({
+        ring: newRange[0].value,
+        min: newRange[0].minMaxRange[0],
+        max: newRange[0].minMaxRange[1],
+      });
+    }
+  }, [tabValue, teamSelected, ringSelected, rangeTableList]);
   return (
     <Flex gap="4" justify="center" align="center">
       <Box>RING:</Box>
@@ -28,6 +41,7 @@ export default function RingSelector({
         onValueChange={(e) => {
           const rangeValue = rangeTableList.filter((d) => d.value === e.value);
           handleRingValue(rangeValue[0]);
+          setTabValue(e.value);
         }}
       >
         <Tabs.List>

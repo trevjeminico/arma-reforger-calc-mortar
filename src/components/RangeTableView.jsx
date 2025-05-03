@@ -12,14 +12,28 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
         <Flex flexWrap="wrap" direction="row" justify="space-between">
           <Box
             py="5px"
-            pl="15px"
             textStyle={{ base: "md", lg: "lg" }}
             fontWeight="medium"
           >
-            {shellType === "HE" && <ExplosiveIcon size="md" />}
-            {shellType === "SMOKE" && <SmokeIcon size="lg" />}
-            {shellType === "ILLUMINATION" && <FlareIcon size="lg" />} round (
-            {index} RINGS)
+            {shellType === "HE" && (
+              <ExplosiveIcon
+                size="md"
+                color={teamSelected === "nato" ? "blue.500" : "red.500"}
+              />
+            )}
+            {shellType === "SMOKE" && (
+              <SmokeIcon
+                size="lg"
+                color={teamSelected === "nato" ? "blue.500" : "red.500"}
+              />
+            )}
+            {shellType === "ILLUMINATION" && (
+              <FlareIcon
+                size="lg"
+                color={teamSelected === "nato" ? "blue.500" : "red.500"}
+              />
+            )}{" "}
+            round ({index} RINGS)
           </Box>
           {rangeAndMils && (
             <Box

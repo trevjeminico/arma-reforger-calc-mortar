@@ -15,7 +15,8 @@ import {
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
 import TeamSaveTargetTable from "./TeamSaveTargetTable";
-import { MortarIcon, MaxIcon, MinIcon } from "./icons/IconsIndex";
+import { MortarIcon, MaxIcon, MinIcon, AltitudeIcon } from "./icons/IconsIndex";
+import { ToggleTip } from "./ui/toggle-tip";
 
 export default function RangeSlider({
   rangeTotal,
@@ -102,6 +103,13 @@ export default function RangeSlider({
         setSaveElevationTarget(total);
       }, 1000);
     }
+    const teamhasChange = teamSelected === "nato" || "russian";
+    if (teamhasChange) {
+      setShowSpinner(true);
+      setTimeout(() => {
+        setShowSpinner(false);
+      }, 2000);
+    }
 
     setTargetRange(rangeTotal > 0 ? rangeTotal : ringValues.min);
   }, [
@@ -130,15 +138,33 @@ export default function RangeSlider({
                   <Flex
                     justify="space-between"
                     flexBasis="100%"
-                    direction={{ base: "column", lg: "row" }}
+                    direction="row"
                     w="100%"
                     mb={{ base: "15px", lg: "0px" }}
                   >
-                    <Field.Label>Alt Difference:</Field.Label>
+                    <Field.Label>
+                      <ToggleTip
+                        content="Altitude Difference between two points"
+                        openDelay={500}
+                        closeDelay={100}
+                      >
+                        <Button variant="ghost">
+                          <AltitudeIcon
+                            size="lg"
+                            mt="4.5%"
+                            color={
+                              teamSelected === "nato" ? "blue.500" : "red.500"
+                            }
+                          />
+                        </Button>
+                      </ToggleTip>
+                    </Field.Label>
                     <Input
                       name="altDiff"
                       onChange={handleTargetAltDiff}
-                      w={{ base: "100%", lg: "60%" }}
+                      w="100%"
+                      ml="5px"
+                      placeholder="(M) Meters"
                     />
                   </Flex>
                 </Field.Root>
@@ -148,7 +174,14 @@ export default function RangeSlider({
                 >
                   Range(M):
                 </Slider.Label>
-                <InputGroup startElement={<MinIcon size="md" />}>
+                <InputGroup
+                  startElement={
+                    <MinIcon
+                      size="md"
+                      color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                    />
+                  }
+                >
                   <Input
                     onChange={handleTargetRange}
                     value={ringValues?.min}
@@ -156,7 +189,15 @@ export default function RangeSlider({
                     disabled
                   />
                 </InputGroup>
-                <InputGroup startElement={<MaxIcon size="md" />}>
+                <InputGroup
+                  startElement={
+                    <MaxIcon
+                      size="md"
+                      color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                    />
+                  }
+                  endElement={<div>Max: {ringValues?.max}</div>}
+                >
                   <Input
                     onChange={handleTargetRange}
                     value={targetRange}
@@ -186,7 +227,7 @@ export default function RangeSlider({
             <Box>
               <Field.Root my="5px">
                 <Field.Label my={{ base: "5px", lg: "0px" }}>
-                  Target Degree:
+                  Target Degree <span>&#176;</span>:
                 </Field.Label>
                 <Input
                   placeholder="target degree"
@@ -211,7 +252,11 @@ export default function RangeSlider({
                 <Stat.Label> Elevation:</Stat.Label>
               </HStack>
               <Stat.ValueText>
-                <MortarIcon size={{ base: "lg", lg: "md" }} mt="4.5%" />
+                <MortarIcon
+                  size={{ base: "lg", lg: "md" }}
+                  mt="4.5%"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
                 {showSpinner ? (
                   <Spinner size="md" mt="5%" />
                 ) : (
@@ -231,7 +276,7 @@ export default function RangeSlider({
           </ButtonGroup>
         </Box>
       </Box>
-      <Box mt="15px" borderWidth="1px">
+      <Box mt="15px" borderWidth="1px" overflowY="auto" maxH="250px">
         {teamSelected === "nato" && (
           <TeamSaveTargetTable
             teamSaveData={savePreviousTargetNato}

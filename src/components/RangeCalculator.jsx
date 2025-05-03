@@ -4,7 +4,7 @@ import { Stack, NumberInput, Separator, Collapsible } from "@chakra-ui/react";
 
 function CollapsibleWrapper({ children, rest }) {
   return (
-    <Collapsible.Root>
+    <Collapsible.Root {...rest}>
       <Collapsible.Trigger
         borderWidth="1px"
         w="100%"
@@ -36,7 +36,7 @@ export default function RangeCalculator({ setTotalRange, teamSelected }) {
   }, [range1, range2, range3, setTotalRange]);
 
   return (
-    <CollapsibleWrapper>
+    <CollapsibleWrapper rest={{ mb: "15px" }}>
       <Stack
         gap="4"
         m={{ base: "0px", lg: "15px" }}
