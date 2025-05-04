@@ -13,9 +13,9 @@ export default function ModalUpdates() {
             <Dialog.Body>
               <Blockquote.Root>
                 <Blockquote.Content>
-                  will be adding documentation soon and try to update some on
-                  the UX/UI for user experience as i have limited time due to
-                  work.
+                  Will be adding documentation soon and will also try to update
+                  some of the UX/UI for user experience cause as i have limited
+                  time due to work load please wait patiently.
                 </Blockquote.Content>
               </Blockquote.Root>
             </Dialog.Body>

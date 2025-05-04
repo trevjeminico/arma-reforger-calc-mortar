@@ -7,9 +7,16 @@ import {
   AbsoluteCenter,
   Stat,
   HStack,
+  Text,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
-import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
+import {
+  ExplosiveIcon,
+  FlareIcon,
+  SmokeIcon,
+  CompassIcon,
+  TargetIcon,
+} from "./icons/IconsIndex";
 
 function TeamDataListWrapper({ data, teamSelected }) {
   return (
@@ -18,10 +25,7 @@ function TeamDataListWrapper({ data, teamSelected }) {
         return (
           <div key={i}>
             <HStack justify="space-between">
-              <Stat.Label fontSize="lg">
-                Ring {key.ring}
-                <span>&#176;</span>
-              </Stat.Label>
+              <Stat.Label fontSize="lg">Ring {key.ring}</Stat.Label>
               {key.type === "HE" && (
                 <ExplosiveIcon
                   size="lg"
@@ -75,8 +79,25 @@ export default function TeamSaveTargetTable({
                 <Box position="relative">
                   <Accordion.ItemTrigger>
                     <Span flex="1">
-                      Target: {key.name} - Deg: {key.deg}
-                      <span>&#176;</span>
+                      <HStack>
+                        <TargetIcon
+                          size="lg"
+                          color={
+                            teamSelected === "nato" ? "blue.500" : "red.500"
+                          }
+                        />
+                        <Text>: {key.name}</Text>
+                        <CompassIcon
+                          size="lg"
+                          color={
+                            teamSelected === "nato" ? "blue.500" : "red.500"
+                          }
+                        />
+                        <Text>
+                          : {key.deg}
+                          <span>&#176;</span>
+                        </Text>
+                      </HStack>
                     </Span>
                     <Accordion.ItemIndicator />
                   </Accordion.ItemTrigger>
