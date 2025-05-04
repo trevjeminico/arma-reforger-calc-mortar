@@ -10,11 +10,13 @@ export default function RingSelector({
 }) {
   const [tabValue, setTabValue] = useState(1);
   const handleRingValue = (data) => {
-    ringSelected({
-      ring: data.value,
-      min: data.minMaxRange[0],
-      max: data.minMaxRange[1],
-    });
+    if (data?.value) {
+      ringSelected({
+        ring: data.value,
+        min: data.minMaxRange[0],
+        max: data.minMaxRange[1],
+      });
+    }
   };
 
   const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
@@ -24,11 +26,13 @@ export default function RingSelector({
     const teamhasChange = teamSelected === "nato" || "russian";
     if (teamhasChange) {
       const newRange = rangeTableList.filter((d) => d.value === tabValue);
-      ringSelected({
-        ring: newRange[0].value,
-        min: newRange[0].minMaxRange[0],
-        max: newRange[0].minMaxRange[1],
-      });
+      if (newRange[0]?.value) {
+        ringSelected({
+          ring: newRange[0].value,
+          min: newRange[0].minMaxRange[0],
+          max: newRange[0].minMaxRange[1],
+        });
+      }
     }
   }, [tabValue, teamSelected, ringSelected, rangeTableList]);
   return (
