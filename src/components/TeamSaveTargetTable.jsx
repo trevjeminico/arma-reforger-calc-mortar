@@ -17,6 +17,7 @@ import {
   CompassIcon,
   TargetIcon,
   AltitudeIcon,
+  MortarIcon,
 } from "./icons/IconsIndex";
 
 export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
@@ -64,7 +65,7 @@ export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
                       </Stat.Label>
                       <HStack>
                         <Stat.ValueText>
-                          Elevation: {key.elev}(M)
+                          <MortarIcon size="lg" mt="5px" /> = {key.elev}(M)
                         </Stat.ValueText>
                       </HStack>
                       <Stat.HelpText>
