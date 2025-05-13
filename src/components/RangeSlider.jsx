@@ -11,38 +11,30 @@ import {
   Field,
   Spinner,
   InputGroup,
+  Stack,
 } from "@chakra-ui/react";
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
-import TeamSaveTargetTable from "./TeamSaveTargetTable";
-import { MortarIcon, MaxIcon, MinIcon, AltitudeIcon } from "./icons/IconsIndex";
-import { ToggleTip } from "./ui/toggle-tip";
+import { MortarIcon, MaxIcon, MinIcon } from "./icons/IconsIndex";
 
 export default function RangeSlider({
   rangeTotal,
   ringValues,
   shellType,
+  targetAltDiff,
   teamSelected,
+  setTargetRangeValue,
 }) {
   const [targetRange, setTargetRange] = useState(0);
   const [showSpinner, setShowSpinner] = useState(false);
-  const [targetAltDiff, setTargetAltDiff] = useState(0);
   const [saveElevationTarget, setSaveElevationTarget] = useState(0);
   const [targetName, setTargetName] = useState(0);
   const [targetDegree, setTargetDegree] = useState("0");
-  const [savePreviousTargetNato, setSavePreviousTargetNato] = useState([]);
-  const [savePreviousTargetRU, setSavePreviousTargetRU] = useState([]);
+  const [currentTargets, setCurrentTargets] = useState([]);
 
   const handleTargetRange = (e) => {
     setTargetRange(e.target.value);
     setShowSpinner(true);
-  };
-
-  const handleTargetAltDiff = (e) => {
-    setShowSpinner(true);
-    setTimeout(() => {
-      setTargetAltDiff(e.target.value);
-    }, 500);
   };
 
   const handleSaveTarget = (e) => {
@@ -50,39 +42,23 @@ export default function RangeSlider({
       setTargetName(targetName + 1);
       const param = {
         name: targetName,
-        deg: targetDegree,
+        targetMils: targetDegree,
         elev: saveElevationTarget,
         ring: ringValues.ring,
         type: shellType,
         team: teamSelected,
+        altDiff: targetAltDiff,
       };
 
-      if (teamSelected === "nato") {
-        setSavePreviousTargetNato([...savePreviousTargetNato, param]);
-      } else {
-        setSavePreviousTargetRU([...savePreviousTargetRU, param]);
-      }
+      setCurrentTargets([...currentTargets, param]);
+      setTargetRangeValue([...currentTargets, param]);
     }
   };
 
   const handleClearBtn = () => {
     setTargetName(0);
-    setSavePreviousTargetRU([]);
-    setSavePreviousTargetNato([]);
-  };
-
-  const handleRemove = (e) => {
-    if (teamSelected === "nato") {
-      const newNatoList = savePreviousTargetNato.filter((nato) => {
-        return nato.name !== parseInt(e.target.value);
-      });
-      setSavePreviousTargetNato(newNatoList);
-    } else {
-      const newRUList = savePreviousTargetRU.filter(
-        (ru) => ru.name !== parseInt(e.target.value)
-      );
-      setSavePreviousTargetRU(newRUList);
-    }
+    setCurrentTargets([]);
+    setTargetRangeValue([]);
   };
 
   useEffect(() => {
@@ -123,6 +99,22 @@ export default function RangeSlider({
 
   return (
     <>
+      <Stack css={{ "--field-label-width": "96px" }}>
+        <Field.Root my="5px" orientation="horizontal">
+          <Field.Label my={{ base: "5px", lg: "0px" }} w="100%">
+            Target in Mil:
+          </Field.Label>
+          <Input
+            placeholder="target degree"
+            name="targetDegree"
+            onChange={(e) => {
+              setTargetDegree(e.target.value);
+            }}
+            w="100%"
+          />
+        </Field.Root>
+      </Stack>
+
       <Box mt="5px">
         <Flex gap="2" direction="column" flexBasis="100%">
           <Slider.Root
@@ -134,40 +126,6 @@ export default function RangeSlider({
           >
             <HStack justify="space-between">
               <Flex direction={{ base: "column", lg: "row" }} flexBasis="100%">
-                <Field.Root>
-                  <Flex
-                    justify="space-between"
-                    flexBasis="100%"
-                    direction="row"
-                    w="100%"
-                    mb={{ base: "15px", lg: "0px" }}
-                  >
-                    <Field.Label>
-                      <ToggleTip
-                        content="Altitude Difference between two points"
-                        openDelay={500}
-                        closeDelay={100}
-                      >
-                        <Button variant="ghost">
-                          <AltitudeIcon
-                            size="lg"
-                            mt="4.5%"
-                            color={
-                              teamSelected === "nato" ? "blue.500" : "red.500"
-                            }
-                          />
-                        </Button>
-                      </ToggleTip>
-                    </Field.Label>
-                    <Input
-                      name="altDiff"
-                      onChange={handleTargetAltDiff}
-                      w="100%"
-                      ml="5px"
-                      placeholder="(M) Meters"
-                    />
-                  </Flex>
-                </Field.Root>
                 <Slider.Label
                   my={{ lg: "10px", base: "0px" }}
                   mx={{ lg: "5px", base: "0px" }}
@@ -224,21 +182,6 @@ export default function RangeSlider({
             w={{ base: "100%" }}
             flexBasis="100%"
           >
-            <Box>
-              <Field.Root my="5px">
-                <Field.Label my={{ base: "5px", lg: "0px" }}>
-                  Target Degree <span>&#176;</span>:
-                </Field.Label>
-                <Input
-                  placeholder="target degree"
-                  name="targetDegree"
-                  onChange={(e) => {
-                    setTargetDegree(e.target.value);
-                  }}
-                  w="100%"
-                />
-              </Field.Root>
-            </Box>
             <Stat.Root
               maxW="200px"
               borderWidth="1px"
@@ -267,7 +210,11 @@ export default function RangeSlider({
             </Stat.Root>
           </Flex>
           <ButtonGroup variant="outline">
-            <Button onClick={handleSaveTarget} colorPalette="blue">
+            <Button
+              onClick={handleSaveTarget}
+              colorPalette="blue"
+              disabled={targetDegree.length === 0 || !!showSpinner}
+            >
               Save
             </Button>
             <Button onClick={handleClearBtn} colorPalette="red">
@@ -275,22 +222,6 @@ export default function RangeSlider({
             </Button>
           </ButtonGroup>
         </Box>
-      </Box>
-      <Box mt="15px" borderWidth="1px" overflowY="auto" maxH="250px">
-        {teamSelected === "nato" && (
-          <TeamSaveTargetTable
-            teamSaveData={savePreviousTargetNato}
-            handleRemove={handleRemove}
-            teamSelected={teamSelected}
-          />
-        )}
-        {teamSelected === "russian" && (
-          <TeamSaveTargetTable
-            teamSaveData={savePreviousTargetRU}
-            handleRemove={handleRemove}
-            teamSelected={teamSelected}
-          />
-        )}
       </Box>
     </>
   );
@@ -300,5 +231,7 @@ RangeSlider.prototype = {
   rangeTotal: PropTypes.any,
   ringValues: PropTypes.any,
   shellType: PropTypes.string,
+  targetAltDiff: PropTypes.any,
   teamSelected: PropTypes.string,
+  setTargetRangeValue: PropTypes.func,
 };

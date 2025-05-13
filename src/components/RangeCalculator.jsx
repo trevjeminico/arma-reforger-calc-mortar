@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Stack, NumberInput, Separator, Collapsible } from "@chakra-ui/react";
+import {
+  Stack,
+  NumberInput,
+  Separator,
+  Button,
+  Flex,
+  InputGroup,
+  Heading,
+  Box,
+} from "@chakra-ui/react";
+import { ToggleTip } from "./ui/toggle-tip";
+import { AltitudeIcon } from "./icons/IconsIndex";
 
-function CollapsibleWrapper({ children, rest }) {
-  return (
-    <Collapsible.Root {...rest}>
-      <Collapsible.Trigger
-        borderWidth="1px"
-        w="100%"
-        my="10px"
-        cursor="pointer"
-        p="2%"
-      >
-        Show and Add Ruler Values for Range
-      </Collapsible.Trigger>
-      <Collapsible.Content>{children}</Collapsible.Content>
-    </Collapsible.Root>
-  );
-}
-
-export default function RangeCalculator({ setTotalRange, teamSelected }) {
+export default function RangeCalculator({
+  setTotalRange,
+  setTargetAltDiff,
+  teamSelected,
+}) {
   const [range1, setRange1] = useState(0);
   const [range2, setRange2] = useState(0);
   const [range3, setRange3] = useState(0);
+  const [target1Alt, setTarget1Alt] = useState(0);
+  const [target2Alt, setTarget2Alt] = useState(0);
   let maxRuler = 900;
   const minRuler = 0;
 
@@ -33,10 +33,23 @@ export default function RangeCalculator({ setTotalRange, teamSelected }) {
   useEffect(() => {
     const total = parseInt(range1) + parseInt(range2) + parseInt(range3);
     setTotalRange(parseInt(total));
-  }, [range1, range2, range3, setTotalRange]);
+    const altDifference = target1Alt - target2Alt;
+    setTargetAltDiff(altDifference);
+  }, [
+    range1,
+    range2,
+    range3,
+    setTotalRange,
+    setTargetAltDiff,
+    target1Alt,
+    target2Alt,
+  ]);
 
   return (
-    <CollapsibleWrapper rest={{ mb: "15px" }}>
+    <Box my="15px">
+      <Heading size={{ base: "md", lg: "sm" }} my="15px">
+        Calculator for Altitude Difference and Range
+      </Heading>
       <Stack
         gap="4"
         m={{ base: "0px", lg: "15px" }}
@@ -72,11 +85,60 @@ export default function RangeCalculator({ setTotalRange, teamSelected }) {
           <NumberInput.Input />
         </NumberInput.Root>
       </Stack>
-    </CollapsibleWrapper>
+      <Flex
+        justify="space-between"
+        flexBasis="100%"
+        direction="row"
+        w="100%"
+        mt={{ base: "15px", lg: "0" }}
+        mb={{ base: "15px", lg: "0px" }}
+      >
+        <ToggleTip
+          content="Altitude Difference between two points target 1 (T1) - target 2 (T2)"
+          openDelay={500}
+          closeDelay={100}
+        >
+          <Button variant="ghost">
+            <AltitudeIcon
+              size="lg"
+              mt="4.5%"
+              color={teamSelected === "nato" ? "blue.500" : "red.500"}
+            />
+          </Button>
+        </ToggleTip>
+
+        <NumberInput.Root
+          value={target1Alt}
+          onValueChange={(e) => setTarget1Alt(e.value)}
+          min={minRuler}
+          max={maxRuler}
+          w="100%"
+        >
+          <InputGroup startElement={<Heading size="lg">T1</Heading>}>
+            <NumberInput.Input />
+          </InputGroup>
+        </NumberInput.Root>
+        <Button disabled variant="ghost">
+          <Heading size="md">-+</Heading>
+        </Button>
+        <NumberInput.Root
+          value={target2Alt}
+          onValueChange={(e) => setTarget2Alt(e.value)}
+          min={minRuler}
+          max={maxRuler}
+          w="100%"
+        >
+          <InputGroup startElement={<Heading size="lg">T2</Heading>}>
+            <NumberInput.Input />
+          </InputGroup>
+        </NumberInput.Root>
+      </Flex>
+    </Box>
   );
 }
 
 RangeCalculator.prototype = {
   setTotalRange: PropTypes.func,
+  setTargetAltDiff: PropTypes.func,
   teamSelected: PropTypes.string,
 };

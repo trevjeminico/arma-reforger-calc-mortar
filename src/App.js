@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Container, Flex, Box, Theme } from "@chakra-ui/react";
 import RangeSelector from "./components/RingSelector";
 import RangeSlider from "./components/RangeSlider";
-import RangeTableView from "./components/RangeTableView";
 import HeaderNav from "./components/HeaderNav";
 import ShellTypeSelector from "./components/ShellTypeSelector";
 import { FEATURE } from "./config";
 import RangeCalculator from "./components/RangeCalculator";
 import ModalUpdates from "./components/ModalUpdates";
+import RangeTableAndTargetViewer from "./components/RangeTableAndTargetViewer";
 
 function App() {
   const [hasRangeValues, setHasRangeValues] = useState(0);
@@ -15,6 +15,9 @@ function App() {
   const [team, setTeam] = useState("russian");
   const [shellType, setShellType] = useState("HE");
   const { SHOW_HEADER } = FEATURE;
+  const [targetRange, setTargetRange] = useState([]);
+
+  const [targetAltDiff, setTargetAltDiff] = useState(0);
 
   return (
     <Theme appearance="dark">
@@ -49,30 +52,28 @@ function App() {
                   <>
                     <RangeCalculator
                       setTotalRange={setHasRangeValues}
+                      setTargetAltDiff={setTargetAltDiff}
                       teamSelected={team}
                     />
                     <RangeSlider
                       rangeTotal={hasRangeValues}
                       ringValues={hasRingValues}
                       shellType={shellType}
+                      targetAltDiff={targetAltDiff}
                       teamSelected={team}
+                      setTargetRangeValue={setTargetRange}
                     />
                   </>
                 )}
               </Box>
             </Flex>
             <Box width={{ base: "100%", lg: "50%" }} borderWidth="1px">
-              {hasRingValues?.ring >= 0 ? (
-                <RangeTableView
-                  index={hasRingValues.ring}
-                  shellType={shellType}
-                  teamSelected={team}
-                />
-              ) : (
-                <Box p="15px" textAlign="center">
-                  SELECT A Ring to see the table
-                </Box>
-              )}
+              <RangeTableAndTargetViewer
+                index={hasRingValues.ring}
+                shellType={shellType}
+                teamSelected={team}
+                targetRange={targetRange}
+              />
             </Box>
           </Flex>
         </Container>
