@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Heading,
-  Box,
-  Card,
-  Grid,
-  GridItem,
-  Stat,
-  HStack,
-  Span,
-} from "@chakra-ui/react";
+import { Heading, Box, Card, Grid, GridItem, Table } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import {
   ExplosiveIcon,
@@ -55,48 +46,78 @@ export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
                     </Heading>
                   </Card.Header>
                   <Card.Body>
-                    <Stat.Root>
-                      <Stat.Label>
-                        {key.type} Round baring {key.targetMils} Mils{" "}
-                        <CompassIcon
-                          size="lg"
-                          color={key.team === "nato" ? "blue.500" : "red.500"}
-                        />
-                      </Stat.Label>
-                      <HStack>
-                        <Stat.ValueText>
-                          <MortarIcon size="lg" mt="5px" /> = {key.elev}(M)
-                        </Stat.ValueText>
-                      </HStack>
-                      <Stat.HelpText>
-                        <AltitudeIcon
-                          size="lg"
-                          color={key.team === "nato" ? "blue.500" : "red.500"}
-                        />
-                        <Span>Altitude Difference of {key.altDiff} (M)</Span>
-                      </Stat.HelpText>
-                    </Stat.Root>
+                    <Table.Root>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.ColumnHeader textAlign="center">
+                            Shell Type
+                          </Table.ColumnHeader>
+                          <Table.ColumnHeader textAlign="center">
+                            <CompassIcon
+                              size="lg"
+                              color={
+                                key.team === "nato" ? "blue.500" : "red.500"
+                              }
+                            />
+                          </Table.ColumnHeader>
+                          <Table.ColumnHeader textAlign="center">
+                            <MortarIcon
+                              size="lg"
+                              color={
+                                key.team === "nato" ? "blue.500" : "red.500"
+                              }
+                            />
+                          </Table.ColumnHeader>
+                          <Table.ColumnHeader textAlign="center">
+                            <AltitudeIcon
+                              size="lg"
+                              color={
+                                key.team === "nato" ? "blue.500" : "red.500"
+                              }
+                            />
+                          </Table.ColumnHeader>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        <Table.Row>
+                          <Table.Cell textAlign="center">
+                            {key.type === "HE" && (
+                              <ExplosiveIcon
+                                size="lg"
+                                color={
+                                  key.team === "nato" ? "blue.500" : "red.500"
+                                }
+                              />
+                            )}
+                            {key.type === "SMOKE" && (
+                              <SmokeIcon
+                                size="lg"
+                                color={
+                                  key.team === "nato" ? "blue.500" : "red.500"
+                                }
+                              />
+                            )}
+                            {key.type === "ILLUMINATION" && (
+                              <FlareIcon
+                                size="lg"
+                                color={
+                                  key.team === "nato" ? "blue.500" : "red.500"
+                                }
+                              />
+                            )}
+                          </Table.Cell>
+                          <Table.Cell textAlign="center">
+                            {key.targetMils}
+                          </Table.Cell>
+                          <Table.Cell textAlign="center">{key.elev}</Table.Cell>
+                          <Table.Cell textAlign="center">
+                            {key.altDiff}
+                          </Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table.Root>
                   </Card.Body>
-                  <Card.Footer>
-                    {key.type === "HE" && (
-                      <ExplosiveIcon
-                        size="lg"
-                        color={key.team === "nato" ? "blue.500" : "red.500"}
-                      />
-                    )}
-                    {key.type === "SMOKE" && (
-                      <SmokeIcon
-                        size="lg"
-                        color={key.team === "nato" ? "blue.500" : "red.500"}
-                      />
-                    )}
-                    {key.type === "ILLUMINATION" && (
-                      <FlareIcon
-                        size="lg"
-                        color={key.team === "nato" ? "blue.500" : "red.500"}
-                      />
-                    )}
-                  </Card.Footer>
+                  <Card.Footer />
                 </Card.Root>
               </GridItem>
             );

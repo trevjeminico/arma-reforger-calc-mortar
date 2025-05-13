@@ -10,7 +10,7 @@ export default function RingSelector({
 }) {
   const [tabValue, setTabValue] = useState(1);
   const handleRingValue = (data) => {
-    if (data?.value) {
+    if (data.value >= 0) {
       ringSelected({
         ring: data.value,
         min: data.minMaxRange[0],
@@ -47,6 +47,7 @@ export default function RingSelector({
           handleRingValue(rangeValue[0]);
           setTabValue(e.value);
         }}
+        value={tabValue}
       >
         <Tabs.List>
           {rangeTableList?.map((key) => {

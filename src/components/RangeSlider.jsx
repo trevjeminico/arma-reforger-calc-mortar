@@ -105,7 +105,6 @@ export default function RangeSlider({
             Target in Mil:
           </Field.Label>
           <Input
-            placeholder="target degree"
             name="targetDegree"
             onChange={(e) => {
               setTargetDegree(e.target.value);
@@ -154,7 +153,7 @@ export default function RangeSlider({
                       color={teamSelected === "nato" ? "blue.500" : "red.500"}
                     />
                   }
-                  endElement={<div>Max: {ringValues?.max}</div>}
+                  endElement={<div>Max: {ringValues?.max} (m)</div>}
                 >
                   <Input
                     onChange={handleTargetRange}

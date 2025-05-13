@@ -51,39 +51,41 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
       </Box>
 
       {rangeAndMils ? (
-        <Table.Root size="lg" striped stickyHeader>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader
-                textAlign="center"
-                textStyle={{ base: "sm", lg: "md" }}
-              >
-                Range (M)
-              </Table.ColumnHeader>
-              <Table.ColumnHeader
-                textAlign="center"
-                textStyle={{ base: "sm", lg: "md" }}
-              >
-                Elevation (MIL)
-              </Table.ColumnHeader>
-              <Table.ColumnHeader
-                textAlign="center"
-                textStyle={{ base: "sm", lg: "md" }}
-              >
-                Time of Flight (SEC)
-              </Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {rangeAndMils.map((item, index) => (
-              <Table.Row key={index}>
-                <Table.Cell textAlign="center">{item.r}</Table.Cell>
-                <Table.Cell textAlign="center">{item.mils}</Table.Cell>
-                <Table.Cell textAlign="center">{item.time}</Table.Cell>
+        <Table.ScrollArea maxH="480px" overflow="auto">
+          <Table.Root size="lg" striped stickyHeader>
+            <Table.Header>
+              <Table.Row>
+                <Table.ColumnHeader
+                  textAlign="center"
+                  textStyle={{ base: "sm", lg: "md" }}
+                >
+                  Range (M)
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  textAlign="center"
+                  textStyle={{ base: "sm", lg: "md" }}
+                >
+                  Elevation (MIL)
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  textAlign="center"
+                  textStyle={{ base: "sm", lg: "md" }}
+                >
+                  Time of Flight (SEC)
+                </Table.ColumnHeader>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
+            </Table.Header>
+            <Table.Body>
+              {rangeAndMils.map((item, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell textAlign="center">{item.r}</Table.Cell>
+                  <Table.Cell textAlign="center">{item.mils}</Table.Cell>
+                  <Table.Cell textAlign="center">{item.time}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table.Root>
+        </Table.ScrollArea>
       ) : (
         <Box
           textAlign="center"
