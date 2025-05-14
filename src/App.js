@@ -14,6 +14,7 @@ function App() {
   const [hasRingValues, setHasRingValues] = useState({});
   const [team, setTeam] = useState("russian");
   const [shellType, setShellType] = useState("HE");
+  const [shellTypeName, setShellTypeName] = useState("");
   const { SHOW_HEADER } = FEATURE;
   const [targetRange, setTargetRange] = useState([]);
 
@@ -45,6 +46,7 @@ function App() {
                 <RangeSelector
                   ringSelected={setHasRingValues}
                   shellTypeIs={shellType}
+                  shellTypeName={setShellTypeName}
                   teamSelected={team}
                 />
 
@@ -62,6 +64,7 @@ function App() {
                       targetAltDiff={targetAltDiff}
                       teamSelected={team}
                       setTargetRangeValue={setTargetRange}
+                      shellTypeName={shellTypeName}
                     />
                   </>
                 )}

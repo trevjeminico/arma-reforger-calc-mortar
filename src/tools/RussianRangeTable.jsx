@@ -1,6 +1,7 @@
 export const RussianRangeTable = [
   {
     Shell_type: "HE",
+    round_name: "O-832DU",
     rangeTableList: [
       {
         value: 0,
@@ -443,6 +444,7 @@ export const RussianRangeTable = [
   },
   {
     Shell_type: "SMOKE",
+    round_name: "D-832DU",
     rangeTableList: [
       {
         value: 0,
@@ -716,6 +718,7 @@ export const RussianRangeTable = [
   },
   {
     Shell_type: "ILLUMINATION",
+    round_name: "S-832S",
     rangeTableList: [
       {
         value: 1,

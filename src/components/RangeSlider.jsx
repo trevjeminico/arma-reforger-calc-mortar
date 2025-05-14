@@ -24,6 +24,7 @@ export default function RangeSlider({
   targetAltDiff,
   teamSelected,
   setTargetRangeValue,
+  shellTypeName,
 }) {
   const [targetRange, setTargetRange] = useState(0);
   const [showSpinner, setShowSpinner] = useState(false);
@@ -48,6 +49,7 @@ export default function RangeSlider({
         type: shellType,
         team: teamSelected,
         altDiff: targetAltDiff,
+        roundName: shellTypeName,
       };
 
       setCurrentTargets([...currentTargets, param]);
@@ -233,4 +235,5 @@ RangeSlider.prototype = {
   targetAltDiff: PropTypes.any,
   teamSelected: PropTypes.string,
   setTargetRangeValue: PropTypes.func,
+  shellTypeName: PropTypes.string,
 };

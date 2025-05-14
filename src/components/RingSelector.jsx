@@ -6,9 +6,15 @@ import PropTypes from "prop-types";
 export default function RingSelector({
   ringSelected,
   shellTypeIs,
+  shellTypeName,
   teamSelected,
 }) {
   const [tabValue, setTabValue] = useState(1);
+
+  const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
+  const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
+  const shellName = getShellTypeRangeTable[0]?.round_name;
+
   const handleRingValue = (data) => {
     if (data.value >= 0) {
       ringSelected({
@@ -16,11 +22,9 @@ export default function RingSelector({
         min: data.minMaxRange[0],
         max: data.minMaxRange[1],
       });
+      shellTypeName(shellName);
     }
   };
-
-  const getShellTypeRangeTable = getShellType(shellTypeIs, teamSelected);
-  const rangeTableList = getShellTypeRangeTable[0]?.rangeTableList;
 
   useEffect(() => {
     const teamhasChange = teamSelected === "nato" || "russian";
@@ -32,9 +36,17 @@ export default function RingSelector({
           min: newRange[0].minMaxRange[0],
           max: newRange[0].minMaxRange[1],
         });
+        shellTypeName(shellName);
       }
     }
-  }, [tabValue, teamSelected, ringSelected, rangeTableList]);
+  }, [
+    tabValue,
+    teamSelected,
+    ringSelected,
+    rangeTableList,
+    shellTypeName,
+    shellName,
+  ]);
   return (
     <Flex gap="4" justify="center" align="center">
       <Box>RING:</Box>
@@ -66,5 +78,6 @@ export default function RingSelector({
 RingSelector.prototype = {
   ringSelected: PropTypes.func,
   shellTypeIs: PropTypes.string,
+  shellTypeName: PropTypes.func,
   teamSelected: PropTypes.string,
 };

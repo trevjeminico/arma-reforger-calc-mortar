@@ -94,7 +94,7 @@ export default function RangeCalculator({
         mb={{ base: "15px", lg: "0px" }}
       >
         <ToggleTip
-          content="Altitude Difference between two points target 1 (T1) - target 2 (T2)"
+          content="Altitude Difference between two points mortar postion (MP) - target positon (TP)"
           openDelay={500}
           closeDelay={100}
         >
@@ -114,7 +114,7 @@ export default function RangeCalculator({
           max={maxRuler}
           w="100%"
         >
-          <InputGroup startElement={<Heading size="lg">T1</Heading>}>
+          <InputGroup startElement={<Heading size="sm">MP</Heading>}>
             <NumberInput.Input />
           </InputGroup>
         </NumberInput.Root>
@@ -128,7 +128,7 @@ export default function RangeCalculator({
           max={maxRuler}
           w="100%"
         >
-          <InputGroup startElement={<Heading size="lg">T2</Heading>}>
+          <InputGroup startElement={<Heading size="sm">T2</Heading>}>
             <NumberInput.Input />
           </InputGroup>
         </NumberInput.Root>

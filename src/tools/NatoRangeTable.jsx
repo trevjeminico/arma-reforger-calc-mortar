@@ -1,6 +1,7 @@
 export const NatoRangeTable = [
   {
     Shell_type: "HE",
+    round_name: "M821",
     rangeTableList: [
       {
         value: 0,
@@ -515,6 +516,7 @@ export const NatoRangeTable = [
   },
   {
     Shell_type: "SMOKE",
+    round_name: "M819",
     rangeTableList: [
       {
         value: 1,
@@ -926,6 +928,7 @@ export const NatoRangeTable = [
   },
   {
     Shell_type: "ILLUMINATION",
+    round_name: "M853A1",
     rangeTableList: [
       {
         value: 1,
