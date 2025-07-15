@@ -55,6 +55,7 @@ function App() {
                     <RangeCalculator
                       setTotalRange={setHasRangeValues}
                       setTargetAltDiff={setTargetAltDiff}
+                      ringValues={hasRingValues}
                       teamSelected={team}
                     />
                     <RangeSlider
