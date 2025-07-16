@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Table } from "@chakra-ui/react";
+import { Box, Button, Table } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import {
   ExplosiveIcon,
@@ -15,8 +15,22 @@ import {
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
 
 export default function TeamSaveTargetTable({ teamSelected }) {
-  const { teamNatoData, teamSovietData } = useContext(TeamSaveDataContext);
+  const { teamNatoData, teamSovietData, setTeamSovietData, setTeamNatoData } =
+    useContext(TeamSaveDataContext);
   const hasData = teamSelected === "nato" ? teamNatoData : teamSovietData;
+
+  const HandleRemoveItem = (id) => {
+    const teamDataIndexRemoveArray =
+      teamSelected !== "nato" ? teamSovietData : teamNatoData;
+    const teamNewArray = teamDataIndexRemoveArray.filter(
+      (item, index) => index !== id
+    );
+    if (teamSelected !== "nato") {
+      setTeamSovietData(teamNewArray);
+    } else {
+      setTeamNatoData(teamNewArray);
+    }
+  };
 
   return (
     <>
@@ -82,12 +96,21 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                     }}
                   />
                 </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  textAlign="center"
+                  color={{
+                    base: teamSelected === "nato" ? "blue.500" : "red.500",
+                  }}
+                >
+                  Action
+                </Table.ColumnHeader>
               </Table.Row>
             </Table.Header>
             {hasData?.map((key, i) => {
               return (
                 <Table.Body
                   color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                  key={i}
                 >
                   <Table.Row>
                     <Table.Cell textAlign="center">{i + 1}</Table.Cell>
@@ -122,6 +145,17 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                     <Table.Cell textAlign="center">{key.targetMils}</Table.Cell>
                     <Table.Cell textAlign="center">{key.elev}</Table.Cell>
                     <Table.Cell textAlign="center">{key.altDiff}</Table.Cell>
+                    <Table.Cell textAlign="center">
+                      <Button
+                        onClick={() => {
+                          HandleRemoveItem(i);
+                        }}
+                        colorPalette={teamSelected === "nato" ? "blue" : "red"}
+                        variant="outline"
+                      >
+                        X
+                      </Button>
+                    </Table.Cell>
                   </Table.Row>
                 </Table.Body>
               );

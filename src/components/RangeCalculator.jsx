@@ -29,6 +29,7 @@ export default function RangeCalculator({
     const altDifference = target1Alt - target2Alt;
     setTargetAltDiff(altDifference);
   }, [range, setTotalRange, setTargetAltDiff, target1Alt, target2Alt]);
+  const isInvalid = range >= minRuler && range <= maxRuler;
 
   return (
     <Box>
@@ -36,16 +37,12 @@ export default function RangeCalculator({
         Calculator for Altitude Difference and Range
       </Heading>
       <Box borderWidth="1px" mt="15px" p="15px" borderBottomWidth="0px">
-        <Field.Root
-          mx="auto"
-          my="15px"
-          invalid={minRuler > range && range < maxRuler} // 400 > 500 (F) && 500 < 2300 (T)
-        >
+        <Field.Root mx="auto" my="15px" invalid={!isInvalid}>
           <Field.Label>
             Input Range between: {minRuler} and {maxRuler} (M)
           </Field.Label>
           <NumberInput.Root
-            value={minRuler}
+            value={range}
             onValueChange={(e) => setRange(e.value)}
             w="100%"
           >
