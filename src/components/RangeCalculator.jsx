@@ -36,7 +36,14 @@ export default function RangeCalculator({
       <Heading size={{ base: "md", lg: "sm" }} my="15px">
         Calculator for Altitude Difference and Range
       </Heading>
-      <Box borderWidth="1px" mt="15px" p="15px" borderBottomWidth="0px">
+      <Box
+        borderLeftWidth={{ base: "0px", lg: "1px" }}
+        borderTopWidth={{ base: "0px", lg: "1px" }}
+        borderRightWidth={{ base: "0px", lg: "1px" }}
+        mt="15px"
+        p={{ base: "0px", lg: "15px" }}
+        borderBottomWidth="0px"
+      >
         <Field.Root mx="auto" my="15px" invalid={!isInvalid}>
           <Field.Label>
             Input Range between: {minRuler} and {maxRuler} (M)

@@ -27,9 +27,17 @@ export default function RingSelector({
   };
 
   useEffect(() => {
-    const teamhasChange = teamSelected === "nato" || "russian";
-    if (teamhasChange) {
-      const newRange = rangeTableList.filter((d) => d.value === tabValue);
+    const teamHasChange = teamSelected === "nato" || "russian";
+    if (teamHasChange) {
+      let newRange = [];
+      const initialRange = rangeTableList.filter((d) => d.value === tabValue);
+      if (initialRange.length === 0) {
+        newRange = rangeTableList.filter((d) => d.value === 1);
+        setTabValue(1);
+      } else {
+        newRange = initialRange;
+      }
+
       if (newRange[0]?.value) {
         ringSelected({
           ring: newRange[0].value,

@@ -12,11 +12,14 @@ import {
   Spinner,
   InputGroup,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
 import { MortarIcon, MaxIcon, MinIcon, TimeIcon } from "./icons/IconsIndex";
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
+
+import { TEAMBASECOLOR } from "../config";
 export default function RangeSlider({
   rangeTotal,
   ringValues,
@@ -34,6 +37,7 @@ export default function RangeSlider({
 
   const { teamSovietData, teamNatoData, setTeamNatoData, setTeamSovietData } =
     useContext(TeamSaveDataContext);
+  const { DEFAULT_COLOR: teamColor } = TEAMBASECOLOR;
 
   const handleTargetRange = (e) => {
     setTargetRange(e.target.value);
@@ -96,7 +100,13 @@ export default function RangeSlider({
   ]);
 
   return (
-    <Box borderWidth="1px" p="15px" borderTopWidth="0px">
+    <Box
+      borderLeftWidth={{ base: "0px", lg: "1px" }}
+      borderBottomWidth={{ base: "0px", lg: "1px" }}
+      borderRightWidth={{ base: "0px", lg: "1px" }}
+      p={{ base: "0px", lg: "15px" }}
+      borderTopWidth="0px"
+    >
       <Stack css={{ "--field-label-width": "96px" }}>
         <Field.Root my="5px" orientation="horizontal">
           <Field.Label my={{ base: "5px", lg: "0px" }} w="100%">
@@ -124,17 +134,14 @@ export default function RangeSlider({
             <HStack justify="space-between">
               <Flex direction={{ base: "column", lg: "row" }} flexBasis="100%">
                 <Slider.Label
-                  my={{ lg: "10px", base: "0px" }}
+                  my={{ lg: "10px", base: "5px" }}
                   mx={{ lg: "5px", base: "0px" }}
                 >
                   Range(M):
                 </Slider.Label>
                 <InputGroup
                   startElement={
-                    <MinIcon
-                      size="md"
-                      color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                    />
+                    <MinIcon size="md" color={teamColor[teamSelected]} />
                   }
                 >
                   <Input
@@ -146,10 +153,7 @@ export default function RangeSlider({
                 </InputGroup>
                 <InputGroup
                   startElement={
-                    <MaxIcon
-                      size="md"
-                      color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                    />
+                    <MaxIcon size="md" color={teamColor[teamSelected]} />
                   }
                   endElement={<div>Max: {ringValues?.max} (m)</div>}
                 >
@@ -195,14 +199,15 @@ export default function RangeSlider({
                 <MortarIcon
                   size={{ base: "lg", lg: "md" }}
                   mt="4.5%"
-                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                  color={teamColor[teamSelected]}
                 />
                 {showSpinner ? (
                   <Spinner size="md" mt="5%" />
                 ) : (
-                  <> {saveElevationTarget} </>
+                  <Text textStyle={{ base: "lg", lg: "md" }} mt="5px">
+                    {saveElevationTarget} MIL
+                  </Text>
                 )}
-                MIL
               </Stat.ValueText>
             </Stat.Root>
             <Stat.Root
@@ -221,14 +226,15 @@ export default function RangeSlider({
                 <TimeIcon
                   size={{ base: "lg", lg: "md" }}
                   mt="4.5%"
-                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                  color={teamColor[teamSelected]}
                 />
                 {showSpinner ? (
                   <Spinner size="md" mt="5%" />
                 ) : (
-                  <> {saveTimeFlight} </>
+                  <Text textStyle={{ base: "lg", lg: "md" }} mt="5px">
+                    {saveTimeFlight} sec
+                  </Text>
                 )}
-                sec
               </Stat.ValueText>
             </Stat.Root>
           </Flex>

@@ -6,3 +6,14 @@ export const FEATURE = {
     enable: true,
   },
 };
+
+export const TEAMBASECOLOR = {
+  DEFAULT_COLOR: {
+    nato: "blue.500",
+    russian: "red.500",
+  },
+  BUTTON_COLOR: {
+    nato: "blue",
+    russian: "red",
+  },
+};

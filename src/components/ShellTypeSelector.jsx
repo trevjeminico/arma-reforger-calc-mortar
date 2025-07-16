@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import { Box, Tabs } from "@chakra-ui/react";
 import { MortarShellType } from "../tools/ShellType";
 import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
+import { TEAMBASECOLOR } from "../config";
 export default function ShellTypeSelector({ typeSelected, teamSelected }) {
+  const { DEFAULT_COLOR: teamColor } = TEAMBASECOLOR;
   return (
     <Box my="15px">
       <Tabs.Root
@@ -17,22 +19,13 @@ export default function ShellTypeSelector({ typeSelected, teamSelected }) {
             return (
               <Tabs.Trigger value={key.name} key={index}>
                 {key.name === "HE" && (
-                  <ExplosiveIcon
-                    size="md"
-                    color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                  />
+                  <ExplosiveIcon size="md" color={teamColor[teamSelected]} />
                 )}
                 {key.name === "SMOKE" && (
-                  <SmokeIcon
-                    size="lg"
-                    color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                  />
+                  <SmokeIcon size="lg" color={teamColor[teamSelected]} />
                 )}
                 {key.name === "ILLUMINATION" && (
-                  <FlareIcon
-                    size="lg"
-                    color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                  />
+                  <FlareIcon size="lg" color={teamColor[teamSelected]} />
                 )}
               </Tabs.Trigger>
             );

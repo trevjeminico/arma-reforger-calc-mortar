@@ -4,6 +4,7 @@ import RangeTableView from "./RangeTableView";
 import { Tabs, Box, Button, ButtonGroup } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 
+import { TEAMBASECOLOR } from "../config";
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
 export default function RangeTableAndTargetViewer({
   index,
@@ -13,7 +14,7 @@ export default function RangeTableAndTargetViewer({
   const { teamNatoData, teamSovietData, setTeamNatoData, setTeamSovietData } =
     useContext(TeamSaveDataContext);
   const hasData = teamSelected === "nato" ? teamNatoData : teamSovietData;
-
+  const { BUTTON_COLOR: buttonColor } = TEAMBASECOLOR;
   const handleClearData = (e) => {
     e.preventDefault();
     if (teamSelected === "nato") {
@@ -39,7 +40,7 @@ export default function RangeTableAndTargetViewer({
         {hasData?.length !== 0 && (
           <ButtonGroup variant="outline" w="100%">
             <Button
-              colorPalette={teamSelected === "nato" ? "blue" : "red"}
+              colorPalette={buttonColor[teamSelected]}
               mx="auto"
               onClick={handleClearData}
               my={{ base: "25px", lg: "15px" }}

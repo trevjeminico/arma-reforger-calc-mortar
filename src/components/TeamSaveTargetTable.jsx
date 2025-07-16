@@ -12,12 +12,16 @@ import {
   MapIcon,
 } from "./icons/IconsIndex";
 
+import { TEAMBASECOLOR } from "../config";
+
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
 
 export default function TeamSaveTargetTable({ teamSelected }) {
   const { teamNatoData, teamSovietData, setTeamSovietData, setTeamNatoData } =
     useContext(TeamSaveDataContext);
+  const { DEFAULT_COLOR: teamColor, BUTTON_COLOR: buttonColor } = TEAMBASECOLOR;
   const hasData = teamSelected === "nato" ? teamNatoData : teamSovietData;
+  const defaultTeamColor = teamColor[teamSelected];
 
   const HandleRemoveItem = (id) => {
     const teamDataIndexRemoveArray =
@@ -38,7 +42,7 @@ export default function TeamSaveTargetTable({ teamSelected }) {
         <Box
           textAlign="center"
           p="15px"
-          color={{ base: teamSelected === "nato" ? "blue.500" : "red.500" }}
+          color={defaultTeamColor}
           textTransform="uppercase"
         >
           no target saved {teamSelected}
@@ -49,96 +53,43 @@ export default function TeamSaveTargetTable({ teamSelected }) {
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader textAlign="center">
-                  <TargetIcon
-                    size="lg"
-                    color={{
-                      base: teamSelected === "nato" ? "blue.500" : "red.500",
-                    }}
-                  />
+                  <TargetIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
-                <Table.ColumnHeader
-                  textAlign="center"
-                  color={{
-                    base: teamSelected === "nato" ? "blue.500" : "red.500",
-                  }}
-                >
+                <Table.ColumnHeader textAlign="center" color={defaultTeamColor}>
                   Ring
                 </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
-                  <MortarIcon
-                    size="lg"
-                    color={{
-                      base: teamSelected === "nato" ? "blue.500" : "red.500",
-                    }}
-                  />
+                  <MortarIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
-                  <CompassIcon
-                    size="lg"
-                    color={{
-                      base: teamSelected === "nato" ? "blue.500" : "red.500",
-                    }}
-                  />
+                  <CompassIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
-                  <MapIcon
-                    size="lg"
-                    color={{
-                      base: teamSelected === "nato" ? "blue.500" : "red.500",
-                    }}
-                  />
+                  <MapIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
-                  <AltitudeIcon
-                    size="lg"
-                    color={{
-                      base: teamSelected === "nato" ? "blue.500" : "red.500",
-                    }}
-                  />
+                  <AltitudeIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
-                <Table.ColumnHeader
-                  textAlign="center"
-                  color={{
-                    base: teamSelected === "nato" ? "blue.500" : "red.500",
-                  }}
-                >
+                <Table.ColumnHeader textAlign="center" color={defaultTeamColor}>
                   Action
                 </Table.ColumnHeader>
               </Table.Row>
             </Table.Header>
             {hasData?.map((key, i) => {
               return (
-                <Table.Body
-                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
-                  key={i}
-                >
+                <Table.Body color={defaultTeamColor} key={i}>
                   <Table.Row>
                     <Table.Cell textAlign="center">{i + 1}</Table.Cell>
                     <Table.Cell textAlign="center">{key.ring}</Table.Cell>
                     <Table.Cell textAlign="center">
                       {key.type === "HE" && (
-                        <ExplosiveIcon
-                          size="lg"
-                          color={
-                            teamSelected === "nato" ? "blue.500" : "red.500"
-                          }
-                        />
+                        <ExplosiveIcon size="lg" color={defaultTeamColor} />
                       )}
                       {key.type === "SMOKE" && (
-                        <SmokeIcon
-                          size="lg"
-                          color={
-                            teamSelected === "nato" ? "blue.500" : "red.500"
-                          }
-                        />
+                        <SmokeIcon size="lg" color={defaultTeamColor} />
                       )}
                       {key.type === "ILLUMINATION" && (
-                        <FlareIcon
-                          size="lg"
-                          color={
-                            teamSelected === "nato" ? "blue.500" : "red.500"
-                          }
-                        />
+                        <FlareIcon size="lg" color={defaultTeamColor} />
                       )}
                       {key.roundName}
                     </Table.Cell>
@@ -150,7 +101,7 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                         onClick={() => {
                           HandleRemoveItem(i);
                         }}
-                        colorPalette={teamSelected === "nato" ? "blue" : "red"}
+                        colorPalette={buttonColor[teamSelected]}
                         variant="outline"
                       >
                         X
