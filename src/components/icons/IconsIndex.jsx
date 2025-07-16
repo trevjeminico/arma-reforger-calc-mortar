@@ -276,13 +276,34 @@ export const MapIcon = createIcon({
         <g id="SVGRepo_iconCarrier">
           <path
             stroke="#000000"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M9 4 3 8v12l6-3 6 3 6-4V4l-6 3-6-3zm-2 8.001V12m4 .001V12m3-2 2 2m2 2-2-2m0 0 2-2m-2 2-2 2"
           ></path>
         </g>
       </svg>
     </>
+  ),
+});
+
+export const TimeIcon = createIcon({
+  displayName: "TimeIcon",
+  path: (
+    <svg
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      ></g>
+      <g id="SVGRepo_iconCarrier">
+        <path d="M6.108,20H4a1,1,0,0,0,0,2H20a1,1,0,0,0,0-2H17.892c-.247-2.774-1.071-7.61-3.826-9,2.564-1.423,3.453-4.81,3.764-7H20a1,1,0,0,0,0-2H4A1,1,0,0,0,4,4H6.17c.311,2.19,1.2,5.577,3.764,7C7.179,12.39,6.355,17.226,6.108,20ZM9,16.6c0-1.2,3-3.6,3-3.6s3,2.4,3,3.6V20H9Z"></path>
+      </g>
+    </svg>
   ),
 });

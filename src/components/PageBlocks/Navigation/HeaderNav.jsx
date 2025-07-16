@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Box, Tabs } from "@chakra-ui/react";
-import PropTypes from "prop-types";
+import { TeamSaveDataContext } from "../../../context/TeamSaveDataProvider";
 export default function HeaderNav({ selectedTeam }) {
   const [teamColor, setTeamColor] = useState("russian");
-
+  const { setTeam } = useContext(TeamSaveDataContext);
   return (
     <Box w="100%" py="15px" px="35px" mb="15px">
       <Tabs.Root
@@ -13,7 +13,7 @@ export default function HeaderNav({ selectedTeam }) {
         colorPalette={teamColor === "russian" ? "red" : "blue"}
         onValueChange={(e) => {
           setTeamColor(e.value);
-          selectedTeam(e.value);
+          setTeam(e.value);
         }}
       >
         <Tabs.List>
@@ -24,7 +24,3 @@ export default function HeaderNav({ selectedTeam }) {
     </Box>
   );
 }
-
-HeaderNav.prototype = {
-  selectedTeam: PropTypes.any,
-};

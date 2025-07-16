@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Table } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import {
@@ -12,10 +12,15 @@ import {
   MapIcon,
 } from "./icons/IconsIndex";
 
-export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
+import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
+
+export default function TeamSaveTargetTable({ teamSelected }) {
+  const { teamNatoData, teamSovietData } = useContext(TeamSaveDataContext);
+  const hasData = teamSelected === "nato" ? teamNatoData : teamSovietData;
+
   return (
     <>
-      {teamSaveData?.length === 0 ? (
+      {hasData?.length === 0 ? (
         <Box
           textAlign="center"
           p="15px"
@@ -37,7 +42,14 @@ export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
                     }}
                   />
                 </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">Ring</Table.ColumnHeader>
+                <Table.ColumnHeader
+                  textAlign="center"
+                  color={{
+                    base: teamSelected === "nato" ? "blue.500" : "red.500",
+                  }}
+                >
+                  Ring
+                </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
                   <MortarIcon
                     size="lg"
@@ -72,31 +84,37 @@ export default function TeamSaveTargetTable({ teamSaveData, teamSelected }) {
                 </Table.ColumnHeader>
               </Table.Row>
             </Table.Header>
-            {teamSaveData?.map((key, i) => {
+            {hasData?.map((key, i) => {
               return (
                 <Table.Body
-                  color={key.team === "nato" ? "blue.500" : "red.500"}
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
                 >
                   <Table.Row>
-                    <Table.Cell textAlign="center">{key.name}</Table.Cell>
+                    <Table.Cell textAlign="center">{i + 1}</Table.Cell>
                     <Table.Cell textAlign="center">{key.ring}</Table.Cell>
                     <Table.Cell textAlign="center">
                       {key.type === "HE" && (
                         <ExplosiveIcon
                           size="lg"
-                          color={key.team === "nato" ? "blue.500" : "red.500"}
+                          color={
+                            teamSelected === "nato" ? "blue.500" : "red.500"
+                          }
                         />
                       )}
                       {key.type === "SMOKE" && (
                         <SmokeIcon
                           size="lg"
-                          color={key.team === "nato" ? "blue.500" : "red.500"}
+                          color={
+                            teamSelected === "nato" ? "blue.500" : "red.500"
+                          }
                         />
                       )}
                       {key.type === "ILLUMINATION" && (
                         <FlareIcon
                           size="lg"
-                          color={key.team === "nato" ? "blue.500" : "red.500"}
+                          color={
+                            teamSelected === "nato" ? "blue.500" : "red.500"
+                          }
                         />
                       )}
                       {key.roundName}

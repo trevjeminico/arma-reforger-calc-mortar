@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Slider,
   HStack,
@@ -15,8 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { calculateElevation } from "../tools/Calculate";
 import PropTypes from "prop-types";
-import { MortarIcon, MaxIcon, MinIcon } from "./icons/IconsIndex";
-
+import { MortarIcon, MaxIcon, MinIcon, TimeIcon } from "./icons/IconsIndex";
+import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
 export default function RangeSlider({
   rangeTotal,
   ringValues,
@@ -29,9 +29,11 @@ export default function RangeSlider({
   const [targetRange, setTargetRange] = useState(0);
   const [showSpinner, setShowSpinner] = useState(false);
   const [saveElevationTarget, setSaveElevationTarget] = useState(0);
-  const [targetName, setTargetName] = useState(0);
+  const [saveTimeFlight, setSaveTimeFlight] = useState(0);
   const [targetDegree, setTargetDegree] = useState("0");
-  const [currentTargets, setCurrentTargets] = useState([]);
+
+  const { teamSovietData, teamNatoData, setTeamNatoData, setTeamSovietData } =
+    useContext(TeamSaveDataContext);
 
   const handleTargetRange = (e) => {
     setTargetRange(e.target.value);
@@ -40,27 +42,20 @@ export default function RangeSlider({
 
   const handleSaveTarget = (e) => {
     if (saveElevationTarget > 0) {
-      setTargetName(targetName + 1);
       const param = {
-        name: targetName,
         targetMils: targetDegree,
         elev: saveElevationTarget,
         ring: ringValues.ring,
         type: shellType,
-        team: teamSelected,
         altDiff: targetAltDiff,
         roundName: shellTypeName,
       };
-
-      setCurrentTargets([...currentTargets, param]);
-      setTargetRangeValue([...currentTargets, param]);
+      if (teamSelected === "nato") {
+        setTeamNatoData([...teamNatoData, param]);
+      } else {
+        setTeamSovietData([...teamSovietData, param]);
+      }
     }
-  };
-
-  const handleClearBtn = () => {
-    setTargetName(0);
-    setCurrentTargets([]);
-    setTargetRangeValue([]);
   };
 
   useEffect(() => {
@@ -78,6 +73,7 @@ export default function RangeSlider({
       }, 2000);
       setTimeout(() => {
         const total = getElevation?.elevationTotal || "Nan";
+        setSaveTimeFlight(getElevation?.timeOfFlight || "00.00");
         setSaveElevationTarget(total);
       }, 1000);
     }
@@ -100,7 +96,7 @@ export default function RangeSlider({
   ]);
 
   return (
-    <>
+    <Box borderWidth="1px" p="15px" borderTopWidth="0px">
       <Stack css={{ "--field-label-width": "96px" }}>
         <Field.Root my="5px" orientation="horizontal">
           <Field.Label my={{ base: "5px", lg: "0px" }} w="100%">
@@ -166,7 +162,7 @@ export default function RangeSlider({
                 </InputGroup>
               </Flex>
             </HStack>
-            <Slider.Control>
+            <Slider.Control display="none">
               <Slider.Track>
                 <Slider.Range />
               </Slider.Track>
@@ -209,6 +205,32 @@ export default function RangeSlider({
                 MIL
               </Stat.ValueText>
             </Stat.Root>
+            <Stat.Root
+              maxW="200px"
+              borderWidth="1px"
+              p="4"
+              rounded="md"
+              visual
+              mt="5px"
+              mb="15px"
+            >
+              <HStack justify="space-between">
+                <Stat.Label> Time of Flight:</Stat.Label>
+              </HStack>
+              <Stat.ValueText>
+                <TimeIcon
+                  size={{ base: "lg", lg: "md" }}
+                  mt="4.5%"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
+                {showSpinner ? (
+                  <Spinner size="md" mt="5%" />
+                ) : (
+                  <> {saveTimeFlight} </>
+                )}
+                sec
+              </Stat.ValueText>
+            </Stat.Root>
           </Flex>
           <ButtonGroup variant="outline">
             <Button
@@ -218,13 +240,10 @@ export default function RangeSlider({
             >
               Save
             </Button>
-            <Button onClick={handleClearBtn} colorPalette="red">
-              Clear
-            </Button>
           </ButtonGroup>
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 

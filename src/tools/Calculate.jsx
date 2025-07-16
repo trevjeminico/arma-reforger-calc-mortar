@@ -41,6 +41,8 @@ function getRangeData(type, index, range, teamName) {
             e1: rangeFullDetails[index].mils,
             e2: nextValue.mils,
             fix: fixMil,
+            t1: rangeFullDetails[index].time,
+            t2: nextValue.time,
           };
         }
       }
@@ -69,8 +71,10 @@ export function calculateElevation(
     parseFloat(fetchRangeValues?.e1) +
     parseFloat(rangeDiff1) +
     parseFloat(aslValue);
+
   return {
     elevationTotal: parseFloat(total).toFixed(2),
     rangeValues: fetchRangeValues,
+    timeOfFlight: `${fetchRangeValues?.t1} - ${fetchRangeValues?.t2}`,
   };
 }

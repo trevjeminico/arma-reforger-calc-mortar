@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Box, Tabs } from "@chakra-ui/react";
 import { MortarShellType } from "../tools/ShellType";
