@@ -1,5 +1,3 @@
-import React from "react";
-
 import { TeamSaveDataProvider, MortarDataProvider } from "./context";
 import Layout from "./Layout";
 

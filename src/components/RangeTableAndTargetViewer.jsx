@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import TeamSaveTargetTable from "./TeamSaveTargetTable";
+import TeamSaveTargetTableMobileView from "./TeamSaveTargetTableMobileView";
 import RangeTableView from "./RangeTableView";
 import { Tabs, Box, Button, ButtonGroup } from "@chakra-ui/react";
 import PropTypes from "prop-types";
@@ -29,13 +30,24 @@ export default function RangeTableAndTargetViewer({
       <Tabs.List>
         <Tabs.Trigger value="saved">Saved Target</Tabs.Trigger>
         <Tabs.Trigger value="range">Range Table</Tabs.Trigger>
-        <Tabs.Trigger value="document" disabled>
+        <Tabs.Trigger value="doc" disabled>
           Documentation
         </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="saved">
-        <Box overflowY="auto" maxH="500px">
+        <Box
+          overflowY="auto"
+          maxH="500px"
+          display={{ base: "none", lg: "block" }}
+        >
           <TeamSaveTargetTable teamSelected={teamSelected} />
+        </Box>
+        <Box
+          overflowY="auto"
+          maxH="500px"
+          display={{ base: "block", lg: "none" }}
+        >
+          <TeamSaveTargetTableMobileView teamSelected={teamSelected} />
         </Box>
         {hasData?.length !== 0 && (
           <ButtonGroup variant="outline" w="100%">
@@ -62,6 +74,9 @@ export default function RangeTableAndTargetViewer({
             SELECT A Ring to see the table
           </Box>
         )}
+      </Tabs.Content>
+      <Tabs.Content value="doc" py="15px">
+        <Box textAlign="center">link to documentation</Box>
       </Tabs.Content>
     </Tabs.Root>
   );

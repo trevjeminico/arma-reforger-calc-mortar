@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
   NumberInput,
@@ -9,8 +9,20 @@ import {
   Heading,
   Box,
 } from "@chakra-ui/react";
-import { ToggleTip } from "./ui/toggle-tip";
 import { AltitudeIcon } from "./icons/IconsIndex";
+import ModalComponent from "./ui/modalComponent";
+
+function AltitudeHelpText() {
+  return (
+    <>
+      <p>Altitude Difference between two points: </p>
+      <Box as="ul" listStylePosition="inside" listStyleType="circle">
+        <li>Mortar Postion (MP)</li>
+        <li>Target Positon (TP)</li>
+      </Box>
+    </>
+  );
+}
 
 export default function RangeCalculator({
   ringValues,
@@ -67,19 +79,23 @@ export default function RangeCalculator({
           mt={{ base: "15px", lg: "0" }}
           mb={{ base: "15px", lg: "0px" }}
         >
-          <ToggleTip
-            content="Altitude Difference between two points mortar postion (MP) - target positon (TP)"
-            openDelay={500}
-            closeDelay={100}
-          >
-            <Button variant="ghost">
-              <AltitudeIcon
-                size="lg"
-                mt="4.5%"
-                color={teamSelected === "nato" ? "blue.500" : "red.500"}
-              />
-            </Button>
-          </ToggleTip>
+          <ModalComponent
+            DialogBtn={{
+              btnVariant: "ghost",
+              btnContent: (
+                <AltitudeIcon
+                  size="lg"
+                  mt="4.5%"
+                  color={teamSelected === "nato" ? "blue.500" : "red.500"}
+                />
+              ),
+            }}
+            DialogContent={{
+              title: "help",
+              content: AltitudeHelpText(),
+              disableCancel: true,
+            }}
+          />
 
           <NumberInput.Root
             value={target1Alt}

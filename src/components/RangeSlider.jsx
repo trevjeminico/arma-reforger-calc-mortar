@@ -52,6 +52,7 @@ export default function RangeSlider({
         ring: ringValues.ring,
         type: shellType,
         altDiff: targetAltDiff,
+        timeOfFlight: saveTimeFlight,
         roundName: shellTypeName,
       };
       if (teamSelected === "nato") {

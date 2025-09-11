@@ -15,6 +15,74 @@ import {
 import { TEAMBASECOLOR } from "../config";
 
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
+import ModalComponent from "./ui/modalComponent";
+
+function TableModalContent({ tableData, teamColor }) {
+  return (
+    <Table.Root>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeader textAlign="center" color={teamColor}>
+            Ring
+          </Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="center">
+            <MortarIcon size="lg" color={teamColor} />
+          </Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="center">
+            <CompassIcon size="lg" color={teamColor} />
+          </Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="center">
+            <MapIcon size="lg" color={teamColor} />
+          </Table.ColumnHeader>
+          <Table.ColumnHeader textAlign="center">
+            <TimeIcon size="md" color={teamColor} />
+          </Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body color={teamColor}>
+        <Table.Row>
+          <Table.Cell textAlign="center">{tableData.ring}</Table.Cell>
+          <Table.Cell textAlign="center">
+            {tableData.type === "HE" && (
+              <ExplosiveIcon size="lg" color={teamColor} />
+            )}
+            {tableData.type === "SMOKE" && (
+              <SmokeIcon size="lg" color={teamColor} />
+            )}
+            {tableData.type === "ILLUMINATION" && (
+              <FlareIcon size="lg" color={teamColor} />
+            )}
+          </Table.Cell>
+          <Table.Cell textAlign="center">{tableData.targetMils}</Table.Cell>
+          <Table.Cell textAlign="center">{tableData.elev}</Table.Cell>
+          <Table.Cell textAlign="center">
+            {tableData.timeOfFlight} sec
+          </Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table.Root>
+  );
+}
+function MobileTeamSaveContent({ keyNum, data, btnColor }) {
+  return {
+    title: (
+      <>
+        <TargetIcon size="lg" color={btnColor} /> Target: {keyNum + 1}
+      </>
+    ),
+    content: TableModalContent({ tableData: data, teamColor: btnColor }),
+    disableCancel: false,
+  };
+}
+
+function MobileTeamSaveBtn({ btnColor }) {
+  return {
+    btnVariant: "outline",
+    btnContent: `View`,
+    btnColor: btnColor,
+  };
+}
 
 export default function TeamSaveTargetTable({ teamSelected }) {
   const { teamNatoData, teamSovietData, setTeamSovietData, setTeamNatoData } =
@@ -55,20 +123,8 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                 <Table.ColumnHeader textAlign="center">
                   <TargetIcon size="lg" color={defaultTeamColor} />
                 </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center" color={defaultTeamColor}>
-                  Ring
-                </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center">
                   <MortarIcon size="lg" color={defaultTeamColor} />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  <CompassIcon size="lg" color={defaultTeamColor} />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  <MapIcon size="lg" color={defaultTeamColor} />
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="center">
-                  <TimeIcon size="md" color={defaultTeamColor} />
                 </Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="center" color={defaultTeamColor}>
                   Action
@@ -80,7 +136,6 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                 <Table.Body color={defaultTeamColor} key={i}>
                   <Table.Row>
                     <Table.Cell textAlign="center">{i + 1}</Table.Cell>
-                    <Table.Cell textAlign="center">{key.ring}</Table.Cell>
                     <Table.Cell textAlign="center">
                       {key.type === "HE" && (
                         <ExplosiveIcon size="lg" color={defaultTeamColor} />
@@ -92,20 +147,27 @@ export default function TeamSaveTargetTable({ teamSelected }) {
                         <FlareIcon size="lg" color={defaultTeamColor} />
                       )}
                     </Table.Cell>
-                    <Table.Cell textAlign="center">{key.targetMils}</Table.Cell>
-                    <Table.Cell textAlign="center">{key.elev}</Table.Cell>
                     <Table.Cell textAlign="center">
-                      {key.timeOfFlight} sec
-                    </Table.Cell>
-                    <Table.Cell textAlign="center">
+                      <ModalComponent
+                        DialogBtn={MobileTeamSaveBtn({
+                          btnColor: buttonColor[teamSelected],
+                        })}
+                        DialogContent={MobileTeamSaveContent({
+                          keyNum: i,
+                          data: key,
+                          btnColor: defaultTeamColor,
+                        })}
+                      />
+
                       <Button
                         onClick={() => {
                           HandleRemoveItem(i);
                         }}
                         colorPalette={buttonColor[teamSelected]}
                         variant="outline"
+                        marginLeft="15px"
                       >
-                        X
+                        clear
                       </Button>
                     </Table.Cell>
                   </Table.Row>
