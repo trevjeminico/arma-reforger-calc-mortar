@@ -1,13 +1,21 @@
 import { Dialog, CloseButton, Portal, Button } from "@chakra-ui/react";
 
-export default function ModalComponent({ DialogBtn, DialogContent }) {
-  const { btnVariant, btnContent, btnColor } = DialogBtn;
+export default function ModalComponent({
+  DialogBtn = {
+    btnVariant: "",
+    btnContent: "title",
+    btnColor: "",
+    dialogRest: {},
+  },
+  DialogContent = { title: "title", content: "content", disableCancel: false },
+}) {
+  const { btnVariant, btnContent, btnColor, dialogRest } = DialogBtn;
   const { title, content, disableCancel } = DialogContent;
   return (
-    <Dialog.Root placement={"center"} colorPalette={"gray"}>
+    <Dialog.Root placement={"center"} colorPalette={"gray"} {...dialogRest}>
       <Dialog.Trigger asChild>
         <Button
-          variant={btnVariant || "outline"}
+          variant={!!btnVariant ? btnVariant : "outline"}
           size="md"
           colorPalette={!!btnColor ? btnColor : ""}
         >

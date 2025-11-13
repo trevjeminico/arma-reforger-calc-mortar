@@ -4,7 +4,8 @@ import TeamSaveTargetTableMobileView from "./TeamSaveTargetTableMobileView";
 import RangeTableView from "./RangeTableView";
 import { Tabs, Box, Button, ButtonGroup } from "@chakra-ui/react";
 import PropTypes from "prop-types";
-
+import ModalComponent from "./ui/modalComponent";
+import Documentation from "../pages/Documentation";
 import { TEAMBASECOLOR } from "../config";
 import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
 export default function RangeTableAndTargetViewer({
@@ -25,14 +26,24 @@ export default function RangeTableAndTargetViewer({
     }
   };
 
+  const docBtnDetail = {
+    btnContent: "documentation",
+    btnVariant: "ghost",
+    dialogRest: { size: "full" },
+  };
+
+  const docContent = {
+    title: "Documentation",
+    content: <Documentation />,
+    disableCancel: true,
+  };
+
   return (
     <Tabs.Root defaultValue={"saved"}>
       <Tabs.List>
         <Tabs.Trigger value="saved">Saved Target</Tabs.Trigger>
         <Tabs.Trigger value="range">Range Table</Tabs.Trigger>
-        <Tabs.Trigger value="doc" disabled>
-          Documentation
-        </Tabs.Trigger>
+        <Tabs.Trigger value="doc">Documentation</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="saved">
         <Box
@@ -76,7 +87,9 @@ export default function RangeTableAndTargetViewer({
         )}
       </Tabs.Content>
       <Tabs.Content value="doc" py="15px">
-        <Box textAlign="center">link to documentation</Box>
+        <Box textAlign="center">
+          <ModalComponent DialogBtn={docBtnDetail} DialogContent={docContent} />
+        </Box>
       </Tabs.Content>
     </Tabs.Root>
   );

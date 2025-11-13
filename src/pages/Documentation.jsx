@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import { Box } from "@chakra-ui/react";
 
-export class Documentation extends Component {
-  render() {
-    return <div>Documentation</div>;
-  }
+export default function Documentation() {
+  return (
+    <>
+      <Box>test</Box>
+    </>
+  );
 }
-
-export default Documentation;
