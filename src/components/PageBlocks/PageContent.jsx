@@ -1,27 +1,23 @@
 import React, { useContext } from "react";
 import { Container, Flex, Box } from "@chakra-ui/react";
-import ShellTypeSelector from "../ShellTypeSelector";
-import RingSelector from "../RingSelector";
+
 import { TeamSaveDataContext } from "../../context/TeamSaveDataProvider";
 import { MortarDataContext } from "../../context/MortarDataProvider";
-import RangeCalculator from "../RangeCalculator";
-import RangeSlider from "../RangeSlider";
+import RangeCalculatorInputWrapper from "../RangeCalculatorInputWrapper";
 import RangeTableAndTargetViewer from "../RangeTableAndTargetViewer";
+import RangeCalculatorDataSheet from "../RangeCalculatorDataSheet";
 export default function PageContent() {
   const { team } = useContext(TeamSaveDataContext);
 
   const {
     hasRangeValues,
     hasRingValues,
+    isLoading,
     shellType,
-    shellTypeName,
     targetAltDiff,
     setTargetAltDiff,
-    setTargetRange,
-    setShellTypeName,
-    setHasRingValues,
     setHasRangeValues,
-    setShellType,
+    setIsLoading,
   } = useContext(MortarDataContext);
   return (
     <Container flex={1}>
@@ -37,39 +33,26 @@ export default function PageContent() {
           justify="center"
           width={{ base: "100%", lg: "50%" }}
         >
-          <Box width="100%" borderWidth="1px" padding="25px">
-            <ShellTypeSelector
-              typeSelected={setShellType}
+          <Box width="100%" borderWidth="1px" padding="15px">
+            <RangeCalculatorInputWrapper
+              setTotalRange={setHasRangeValues}
+              setTargetAltDiff={setTargetAltDiff}
+              setIsLoading={setIsLoading}
               teamSelected={team}
             />
-            <RingSelector
-              ringSelected={setHasRingValues}
-              shellTypeIs={shellType}
-              shellTypeName={setShellTypeName}
+          </Box>
+          <Box width="100%" borderWidth="1px" padding="15px">
+            <RangeCalculatorDataSheet
+              altDiff={targetAltDiff}
+              rangeValue={hasRangeValues}
               teamSelected={team}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
             />
-            {hasRingValues?.min && (
-              <>
-                <RangeCalculator
-                  setTotalRange={setHasRangeValues}
-                  setTargetAltDiff={setTargetAltDiff}
-                  ringValues={hasRingValues}
-                  teamSelected={team}
-                />
-                <RangeSlider
-                  rangeTotal={hasRangeValues}
-                  ringValues={hasRingValues}
-                  shellType={shellType}
-                  targetAltDiff={targetAltDiff}
-                  teamSelected={team}
-                  setTargetRangeValue={setTargetRange}
-                  shellTypeName={shellTypeName}
-                />
-              </>
-            )}
           </Box>
         </Flex>
         <Box width={{ base: "100%", lg: "50%" }} borderWidth="1px">
+          {/* <RingSelector /> */}
           <RangeTableAndTargetViewer
             index={hasRingValues.ring}
             shellType={shellType}

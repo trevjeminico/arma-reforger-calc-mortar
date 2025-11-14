@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { getRangeTableByRing } from "../tools/Calculate";
+import { getRangeTableByRing } from "../tools/ToolKit";
 import { Table, Box, Flex } from "@chakra-ui/react";
 import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
 export default function RangeTableView({ shellType, index, teamSelected }) {

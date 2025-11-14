@@ -26,9 +26,11 @@ export default function RangeTableAndTargetViewer({
   };
 
   return (
-    <Tabs.Root defaultValue={"saved"}>
+    <Tabs.Root defaultValue={"range"}>
       <Tabs.List>
-        <Tabs.Trigger value="saved">Saved Target</Tabs.Trigger>
+        <Tabs.Trigger value="saved" disabled>
+          Saved Target
+        </Tabs.Trigger>
         <Tabs.Trigger value="range">Range Table</Tabs.Trigger>
         <Tabs.Trigger value="doc" disabled>
           Documentation

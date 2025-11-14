@@ -8,6 +8,7 @@ export const MortarDataProvider = ({ children }) => {
   const [shellType, setShellType] = useState("HE");
   const [shellTypeName, setShellTypeName] = useState("");
   const [targetRange, setTargetRange] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [targetAltDiff, setTargetAltDiff] = useState(0);
   const value = {
@@ -17,12 +18,14 @@ export const MortarDataProvider = ({ children }) => {
     shellTypeName,
     targetRange,
     targetAltDiff,
+    isLoading,
     setTargetAltDiff,
     setTargetRange,
     setShellTypeName,
     setShellType,
     setHasRingValues,
     setHasRangeValues,
+    setIsLoading,
   };
   return (
     <MortarDataContext.Provider value={value}>
