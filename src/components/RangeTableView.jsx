@@ -1,13 +1,35 @@
-import React from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
-import { getRangeTableByRing } from "../tools/ToolKit";
-import { Table, Box, Flex } from "@chakra-ui/react";
+import { getRangeTableByRing, getShellType } from "../tools/ToolKit";
+import { Table, Box, Flex, Group } from "@chakra-ui/react";
 import { ExplosiveIcon, FlareIcon, SmokeIcon } from "./icons/IconsIndex";
-export default function RangeTableView({ shellType, index, teamSelected }) {
-  const wrapToArray = getRangeTableByRing(shellType, index, teamSelected);
+import ShellTypeSelector from "./ShellTypeSelector";
+import RingSelector from "./RingSelector";
+export default function RangeTableView({ teamSelected }) {
+  const [ringValue, setRingValue] = useState(1);
+  const [shellType, setShellType] = useState("HE");
+  const wrapToArray = getRangeTableByRing(shellType, ringValue, teamSelected);
+  const shellNumberOfRings = getShellType(shellType, teamSelected);
   const rangeAndMils = wrapToArray[0]?.range;
   return (
     <>
+      <Box w="100%" textAlign={"center"}>
+        <Group>
+          <Box>
+            <ShellTypeSelector
+              typeSelected={setShellType}
+              teamSelected={teamSelected}
+            />
+          </Box>
+          <Box>
+            <RingSelector
+              ringSelected={setRingValue}
+              teamSelected={teamSelected}
+              ringData={shellNumberOfRings}
+            />
+          </Box>
+        </Group>
+      </Box>
       <Box py="15px" px="20px" borderBottomWidth="1px">
         <Flex flexWrap="wrap" direction="row" justify="space-between">
           <Box
@@ -33,7 +55,7 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
                 color={teamSelected === "nato" ? "blue.500" : "red.500"}
               />
             )}{" "}
-            round ({index} RINGS)
+            round ({ringValue} RINGS)
           </Box>
           {rangeAndMils && (
             <Box
@@ -94,7 +116,7 @@ export default function RangeTableView({ shellType, index, teamSelected }) {
           fontWeight="medium"
           textTransform="uppercase"
         >
-          NO {index} RING FOR {shellType} please select other rings
+          NO {ringValue} RING FOR {shellType} please select other rings
         </Box>
       )}
     </>

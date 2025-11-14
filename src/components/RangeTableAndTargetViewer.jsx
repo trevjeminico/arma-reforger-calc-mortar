@@ -65,17 +65,11 @@ export default function RangeTableAndTargetViewer({
         )}
       </Tabs.Content>
       <Tabs.Content value="range">
-        {index >= 0 ? (
-          <RangeTableView
-            index={index}
-            shellType={shellType}
-            teamSelected={teamSelected}
-          />
-        ) : (
-          <Box p="15px" textAlign="center">
-            SELECT A Ring to see the table
-          </Box>
-        )}
+        <RangeTableView
+          index={index}
+          shellType={shellType}
+          teamSelected={teamSelected}
+        />
       </Tabs.Content>
       <Tabs.Content value="doc" py="15px">
         <Box textAlign="center">link to documentation</Box>

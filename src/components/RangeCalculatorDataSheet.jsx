@@ -106,22 +106,20 @@ export default function RangeCalculatorDataSheet({
           teamSelected
         );
 
-      if (result1?.length > 0) {
-        setExplosiveResult(result1);
-        setSmokeResult(result2);
-        setIlluminationResult(result3);
-        setRoundNames({
-          HE: roundNameHE,
-          smoke: roundNameSmoke,
-          illu: roundNameIllu,
-        });
-      }
+      setExplosiveResult(result1);
+      setSmokeResult(result2);
+      setIlluminationResult(result3);
+      setRoundNames({
+        HE: roundNameHE,
+        smoke: roundNameSmoke,
+        illu: roundNameIllu,
+      });
     };
     handleResult();
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 5000);
+    }, 2000);
   }, [rangeValue, altDiff, teamSelected, setIsLoading]);
 
   const orientation = useBreakpointValue({
@@ -160,9 +158,9 @@ export default function RangeCalculatorDataSheet({
         <Tabs.Content value="HE" w="100%">
           <Group>
             <Box borderRightWidth="1px" px="15px">
-              Type: Explosive
+              Name: {roundNames.HE}
             </Box>
-            <Box px="15px">Name: {roundNames.HE}</Box>
+            <Box px="15px">Type: Explosive</Box>
           </Group>
           <ResultTableData
             item={explosiveResult}
@@ -174,9 +172,9 @@ export default function RangeCalculatorDataSheet({
         <Tabs.Content value="SMOKE" w="100%">
           <Group>
             <Box borderRightWidth="1px" px="15px">
-              Type: Smoke
+              Name: {roundNames.smoke}
             </Box>
-            <Box px="15px">Name: {roundNames.smoke}</Box>
+            <Box px="15px">Type: Smoke</Box>
           </Group>
           <ResultTableData
             item={smokeResult}
@@ -188,9 +186,9 @@ export default function RangeCalculatorDataSheet({
         <Tabs.Content value="ILLUMINATION" w="100%">
           <Group>
             <Box borderRightWidth="1px" px="15px">
-              Type: Illumination
+              Name: {roundNames.illu}
             </Box>
-            <Box px="15px">Name: {roundNames.illu}</Box>
+            <Box px="15px">Type: Illumination</Box>
           </Group>
           <ResultTableData
             item={illuminationResult}
@@ -199,30 +197,32 @@ export default function RangeCalculatorDataSheet({
           />
         </Tabs.Content>
       </Tabs.Root>
-      <Box textAlign="center" mt="15px">
-        {!showSaveOpt ? (
-          <Button onClick={() => setShowSaveOpt(true)}>
-            Saved This Data Sheet?
-          </Button>
-        ) : (
-          <>
-            <Flex gap="3" direction="row">
-              <Field.Root>
-                <Field.Label>Target Name:</Field.Label>
-                <Input placeholder="" />
-              </Field.Root>
-              <Field.Root>
-                <Field.Label>Target in Mil / Degree:</Field.Label>
-                <Input placeholder="" />
-              </Field.Root>
-            </Flex>
-            <ButtonGroup mt="15px">
-              <Button>confirm save</Button>
-              <Button onClick={() => setShowSaveOpt(false)}>cancel</Button>
-            </ButtonGroup>
-          </>
-        )}
-      </Box>
+      {false && (
+        <Box textAlign="center" mt="15px">
+          {!showSaveOpt ? (
+            <Button onClick={() => setShowSaveOpt(true)}>
+              Saved This Data Sheet?
+            </Button>
+          ) : (
+            <>
+              <Flex gap="3" direction="row">
+                <Field.Root>
+                  <Field.Label>Target Name:</Field.Label>
+                  <Input placeholder="" />
+                </Field.Root>
+                <Field.Root>
+                  <Field.Label>Target in Mil / Degree:</Field.Label>
+                  <Input placeholder="" />
+                </Field.Root>
+              </Flex>
+              <ButtonGroup mt="15px">
+                <Button>confirm save</Button>
+                <Button onClick={() => setShowSaveOpt(false)}>cancel</Button>
+              </ButtonGroup>
+            </>
+          )}
+        </Box>
+      )}
     </>
   );
 }

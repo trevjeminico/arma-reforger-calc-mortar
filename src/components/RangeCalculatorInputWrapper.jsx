@@ -18,16 +18,11 @@ export default function RangeCalculatorInputWrapper({
   useEffect(() => {
     const total = parseInt(range);
     setTotalRange(parseInt(total));
-    if (target2Alt.length === 0) {
-      setTarget2Alt(0);
-    }
-    if (target1Alt.length === 0) {
-      setTarget1Alt(0);
-    }
+
     const altDifference = target1Alt - target2Alt;
     setTargetAltDiff(altDifference);
   }, [range, setTotalRange, setTargetAltDiff, target1Alt, target2Alt]);
-  const isInvalid = range >= minRuler && range <= maxRuler;
+  // const isInvalid = range >= minRuler && range <= maxRuler;
   const { DEFAULT_COLOR: teamColor } = TEAMBASECOLOR;
   const defaultTeamColor = teamColor[teamSelected];
   return (
@@ -36,7 +31,7 @@ export default function RangeCalculatorInputWrapper({
         Input Range and Altitude Difference
       </Heading>
       <Box p={{ base: "0px" }} borderBottomWidth="0px">
-        <Field.Root mx="auto" mb="15px" invalid={!isInvalid}>
+        <Field.Root mx="auto" mb="15px">
           <Field.Label>
             Range between {minRuler} and {maxRuler} (M)
           </Field.Label>
@@ -50,9 +45,9 @@ export default function RangeCalculatorInputWrapper({
           >
             <NumberInput.Input maxLength="4" />
           </NumberInput.Root>
-          <Field.ErrorText>
+          {/* <Field.ErrorText>
             Please input valid range between: {minRuler} and {maxRuler} (M)
-          </Field.ErrorText>
+          </Field.ErrorText> */}
         </Field.Root>
         <Flex
           flexBasis="100%"

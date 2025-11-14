@@ -9,7 +9,8 @@ function getTeamRangeTable(teamName) {
 
 export function getShellType(type, teamName) {
   const RangeTable = getTeamRangeTable(teamName);
-  return RangeTable.filter((shell) => shell.Shell_type === type);
+  const { rangeData } = RangeTable[0];
+  return rangeData.filter((shell) => shell.Shell_type === type);
 }
 
 export function getRangeTableByRing(type, index, teamName) {
