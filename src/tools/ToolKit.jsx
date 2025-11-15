@@ -113,3 +113,7 @@ export function getMinMaxRange(teamSelected) {
   const teamRangeTable = getTeamRangeTable(teamSelected);
   return teamRangeTable[0].maxRange;
 }
+
+export function uuid() {
+  return Math.random().toString(36).substring(2, 15);
+}

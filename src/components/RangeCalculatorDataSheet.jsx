@@ -1,81 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-
 import {
-  Tabs,
-  Table,
-  Spinner,
-  useBreakpointValue,
-  Group,
   Box,
   Button,
   ButtonGroup,
   Field,
   Input,
   Flex,
+  NumberInput,
 } from "@chakra-ui/react";
 import { getRangeResultByShellType } from "../tools/ToolKit";
 import { TEAMBASECOLOR } from "../config";
-import {
-  MortarIcon,
-  TimeIcon,
-  ExplosiveIcon,
-  FlareIcon,
-  SmokeIcon,
-} from "./icons/IconsIndex";
-import { MortarShellType } from "../tools/ShellType";
-function ResultTableData({ item, defaultTeamColor, isLoading }) {
-  return (
-    <Table.Root size="sm" interactive>
-      <Table.Header>
-        <Table.Row>
-          <Table.ColumnHeader color={defaultTeamColor} textAlign="center">
-            Ring #
-          </Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="center">
-            <MortarIcon
-              size={{ base: "lg", lg: "md" }}
-              mt="4.5%"
-              color={defaultTeamColor}
-            />
-          </Table.ColumnHeader>
-          <Table.ColumnHeader textAlign="center">
-            <TimeIcon
-              size={{ base: "lg", lg: "md" }}
-              mt="4.5%"
-              color={defaultTeamColor}
-            />
-          </Table.ColumnHeader>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {item?.map((key) => (
-          <Table.Row
-            key={key?.value}
-            textAlign="center"
-            color={defaultTeamColor}
-          >
-            <Table.Cell textAlign="center">{key?.value}</Table.Cell>
-            <Table.Cell textAlign="center">
-              {isLoading ? (
-                <Spinner size="md" mt="5%" />
-              ) : (
-                <>{key?.result?.elevationTotal || "N/A"}</>
-              )}
-            </Table.Cell>
-            <Table.Cell textAlign="center">
-              {isLoading ? (
-                <Spinner size="md" mt="5%" />
-              ) : (
-                <>{key?.result?.timeOfFlight || "N/A"}</>
-              )}
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table.Root>
-  );
-}
+
+import { uuid } from "../tools/ToolKit";
+import { TeamSaveDataContext } from "../context/TeamSaveDataProvider";
+import ShellTypeTabs from "./Tabs/ShellTypeTabs";
 
 export default function RangeCalculatorDataSheet({
   altDiff,
@@ -87,10 +26,15 @@ export default function RangeCalculatorDataSheet({
   const [explosiveResult, setExplosiveResult] = useState([]);
   const [smokeResult, setSmokeResult] = useState([]);
   const [illuminationResult, setIlluminationResult] = useState([]);
+  const [targetName, setTargetName] = useState("");
+  const [targetMilDeg, setTargetMilDeg] = useState(0);
   const [roundNames, setRoundNames] = useState({});
   const [showSaveOpt, setShowSaveOpt] = useState(false);
-  const { DEFAULT_COLOR: teamColor } = TEAMBASECOLOR;
+  const { DEFAULT_COLOR: teamColor, BUTTON_COLOR: buttonColor } = TEAMBASECOLOR;
   const defaultTeamColor = teamColor[teamSelected];
+  const buttonTeamColor = buttonColor[teamSelected];
+  const { teamSovietData, teamNatoData, setTeamNatoData, setTeamSovietData } =
+    useContext(TeamSaveDataContext);
 
   useEffect(() => {
     const handleResult = () => {
@@ -122,107 +66,95 @@ export default function RangeCalculatorDataSheet({
     }, 2000);
   }, [rangeValue, altDiff, teamSelected, setIsLoading]);
 
-  const orientation = useBreakpointValue({
-    base: "horizontal",
-    lg: "vertical",
-  });
+  const handleSaveTarget = () => {
+    const tId = uuid();
+    const param = {
+      id: tId,
+      tName: targetName,
+      tMilDeg: targetMilDeg,
+      eResult: explosiveResult,
+      sResult: smokeResult,
+      iResult: illuminationResult,
+      roundNames: roundNames,
+    };
+
+    if (teamSelected === "nato") {
+      setTeamNatoData([...teamNatoData, param]);
+    } else {
+      setTeamSovietData([...teamSovietData, param]);
+    }
+    setTargetName("");
+    setShowSaveOpt(false);
+  };
 
   return (
     <>
       <h3>Data Sheet:</h3>
+      <ShellTypeTabs
+        defaultTeamColor={defaultTeamColor}
+        roundNames={roundNames}
+        explosiveResult={explosiveResult}
+        smokeResult={smokeResult}
+        illuminationResult={illuminationResult}
+        isLoading={isLoading}
+      />
+      <Box textAlign="center" mt="15px">
+        {!showSaveOpt ? (
+          <Button
+            onClick={() => setShowSaveOpt(true)}
+            colorPalette={buttonTeamColor}
+            variant="surface"
+          >
+            Saved This Data Sheet?
+          </Button>
+        ) : (
+          <>
+            <Flex gap="3" direction="row">
+              <Field.Root>
+                <Field.Label>Target Name:</Field.Label>
+                <Input
+                  placeholder=""
+                  onChange={(e) => {
+                    setTargetName(e.target.value);
+                  }}
+                  maxLength={11}
+                />
+              </Field.Root>
+              <Field.Root>
+                <Field.Label>Target in Mil / Degree:</Field.Label>
 
-      <Tabs.Root
-        variant="subtle"
-        defaultValue="HE"
-        orientation={orientation}
-        color={defaultTeamColor}
-      >
-        <Tabs.List>
-          {MortarShellType.map((key, index) => {
-            return (
-              <Tabs.Trigger value={key.name} key={index}>
-                {key.name === "HE" && (
-                  <ExplosiveIcon size="md" color={defaultTeamColor} />
-                )}
-                {key.name === "SMOKE" && (
-                  <SmokeIcon size="lg" color={defaultTeamColor} />
-                )}
-                {key.name === "ILLUMINATION" && (
-                  <FlareIcon size="lg" color={defaultTeamColor} />
-                )}
-              </Tabs.Trigger>
-            );
-          })}
-        </Tabs.List>
-
-        <Tabs.Content value="HE" w="100%">
-          <Group>
-            <Box borderRightWidth="1px" px="15px">
-              Name: {roundNames.HE}
-            </Box>
-            <Box px="15px">Type: Explosive</Box>
-          </Group>
-          <ResultTableData
-            item={explosiveResult}
-            defaultTeamColor={defaultTeamColor}
-            isLoading={isLoading}
-          />
-        </Tabs.Content>
-
-        <Tabs.Content value="SMOKE" w="100%">
-          <Group>
-            <Box borderRightWidth="1px" px="15px">
-              Name: {roundNames.smoke}
-            </Box>
-            <Box px="15px">Type: Smoke</Box>
-          </Group>
-          <ResultTableData
-            item={smokeResult}
-            defaultTeamColor={defaultTeamColor}
-            isLoading={isLoading}
-          />
-        </Tabs.Content>
-
-        <Tabs.Content value="ILLUMINATION" w="100%">
-          <Group>
-            <Box borderRightWidth="1px" px="15px">
-              Name: {roundNames.illu}
-            </Box>
-            <Box px="15px">Type: Illumination</Box>
-          </Group>
-          <ResultTableData
-            item={illuminationResult}
-            defaultTeamColor={defaultTeamColor}
-            isLoading={isLoading}
-          />
-        </Tabs.Content>
-      </Tabs.Root>
-      {false && (
-        <Box textAlign="center" mt="15px">
-          {!showSaveOpt ? (
-            <Button onClick={() => setShowSaveOpt(true)}>
-              Saved This Data Sheet?
-            </Button>
-          ) : (
-            <>
-              <Flex gap="3" direction="row">
-                <Field.Root>
-                  <Field.Label>Target Name:</Field.Label>
-                  <Input placeholder="" />
-                </Field.Root>
-                <Field.Root>
-                  <Field.Label>Target in Mil / Degree:</Field.Label>
-                  <Input placeholder="" />
-                </Field.Root>
-              </Flex>
-              <ButtonGroup mt="15px">
-                <Button>confirm save</Button>
-                <Button onClick={() => setShowSaveOpt(false)}>cancel</Button>
-              </ButtonGroup>
-            </>
-          )}
-        </Box>
-      )}
+                <NumberInput.Root
+                  value={targetMilDeg}
+                  onValueChange={(e) => {
+                    setTargetMilDeg(parseInt(e.value));
+                  }}
+                  w="100%"
+                >
+                  <NumberInput.Input maxLength="4" />
+                </NumberInput.Root>
+              </Field.Root>
+            </Flex>
+            <ButtonGroup mt="15px">
+              <Button
+                onClick={handleSaveTarget}
+                disabled={targetName.length === 0}
+                colorPalette="blue"
+                variant="ghost"
+              >
+                confirm save
+              </Button>
+              <Button
+                onClick={() => setShowSaveOpt(false)}
+                disabled={targetMilDeg.length === 0}
+                colorPalette="red"
+                variant="ghost"
+              >
+                cancel
+              </Button>
+            </ButtonGroup>
+          </>
+        )}
+      </Box>
     </>
   );
 }
